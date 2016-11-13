@@ -14,10 +14,12 @@ public class ConstsPOC {
     // maximum number of attempts to deploy the zip file
 	public static final int MAX_NUM_POLL_REQUESTS = 50;
 	
-	public static final String WORKING_DIR = "D:\\work\\MYenv\\workingDir\\";
+	//public static final String WORKING_DIR = "D:\\work\\MYenv\\workingDir\\";
+	public static final String WORKING_DIR = "/tmp/";
 	
 	public static final String ZIP_FILE = WORKING_DIR + "components.zip";
 
     // manifest file that controls which components get retrieved
-	public static final String MANIFEST_FILE = WORKING_DIR + "package.xml";
+	//public static final String MANIFEST_FILE = WORKING_DIR + "package.xml";
+	public static final String MANIFEST_FILE = "/resources/package.xml";
 }
