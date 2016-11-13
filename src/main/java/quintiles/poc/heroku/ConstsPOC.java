@@ -21,5 +21,5 @@ public class ConstsPOC {
 
     // manifest file that controls which components get retrieved
 	//public static final String MANIFEST_FILE = WORKING_DIR + "package.xml";
-	public static final String MANIFEST_FILE = "/resources/package.xml";
+	public static final String MANIFEST_FILE = "/classes/package.xml";
 }
