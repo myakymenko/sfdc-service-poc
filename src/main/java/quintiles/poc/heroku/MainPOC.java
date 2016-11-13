@@ -134,12 +134,9 @@ public class MainPOC {
 		if (list != null) {
 			for (File file : list) {
 				if (file.isDirectory()) {
-					System.out.println("Found dir : " + file.getAbsolutePath());
 					result = searchFile(fileName, file);
 				} else {
 					if (fileName.equalsIgnoreCase(file.getName())) {
-						System.out.println("Comparison file : " + fileName);
-						System.out.println("Found file : " + file.getName());
 						result = file;
 					}
 				}
