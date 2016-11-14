@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -57,6 +58,7 @@ public class MetadataUtil {
 	        }
         }
     }
+	
 	private static RetrieveResult sendMetadataRetrieveRequest(MetadataConnection metadataConnection) throws Exception {
 		RetrieveRequest retrieveRequest = new RetrieveRequest();
         // The version in package.xml overrides the version in RetrieveRequest
@@ -89,7 +91,7 @@ public class MetadataUtil {
 		// Edit the path, if necessary, if your package.xml file is located
 		// elsewhere
 		
-		File unpackedManifest = new File(ConstsPOC.MANIFEST_FILE);
+		/*File unpackedManifest = new File(ConstsPOC.MANIFEST_FILE);
 		System.out.println("Manifest file: " + unpackedManifest.getAbsolutePath());
 
 		if (!unpackedManifest.exists() || !unpackedManifest.isFile()) {
@@ -98,10 +100,34 @@ public class MetadataUtil {
 								unpackedManifest.getAbsolutePath());
 		}
 
-		// Note that we use the fully quualified class name because
-		// of a collision with the java.lang.Package class
-		com.sforce.soap.metadata.Package p = parsePackageManifest(unpackedManifest);
+		com.sforce.soap.metadata.Package p = parsePackageManifest(unpackedManifest);*/
+		com.sforce.soap.metadata.Package p = getRetrieveManifest();
 		request.setUnpackaged(p);
+	}
+	
+	private static com.sforce.soap.metadata.Package getRetrieveManifest() {
+		com.sforce.soap.metadata.Package packageManifest = null;
+		HashMap<String, String[]> retrieveConfig = new HashMap<String, String[]>();
+		//retrieveConfig.put("Layout",new String[]{"Account-TestAcc1", "Account-Account Layout", "Account-TestAcc2"});
+		retrieveConfig.put("Layout",new String[]{"*"});
+		retrieveConfig.put("Profile",new String[]{"*"});
+		retrieveConfig.put("CustomObject",new String[]{"Account"});
+		
+		List<PackageTypeMembers> pkgMembers = new ArrayList<>();
+		
+		for (String key : retrieveConfig.keySet()) {
+			PackageTypeMembers packageTypes = new PackageTypeMembers();
+			packageTypes.setName(key);
+			packageTypes.setMembers(retrieveConfig.get(key));
+			
+			pkgMembers.add(packageTypes);
+		}
+		
+		packageManifest = new com.sforce.soap.metadata.Package();
+		PackageTypeMembers[] packageTypesArray = new PackageTypeMembers[pkgMembers.size()];
+		packageManifest.setTypes(pkgMembers.toArray(packageTypesArray));
+		packageManifest.setVersion(ConstsPOC.API_VERSION + "");
+		return packageManifest;
 	}
 
 	private static com.sforce.soap.metadata.Package parsePackageManifest(File file) throws ParserConfigurationException, IOException, SAXException {
