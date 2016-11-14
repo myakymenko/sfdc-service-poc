@@ -98,7 +98,7 @@ public class MyResource {
     @GET
     @Path("sobjectRTLayouts")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getLayoutsByRecordType(@QueryParam("sObjectName") String sObjectName,
+    public String getLayoutByRecordType(@QueryParam("sObjectName") String sObjectName,
             				@QueryParam("userId") String userId,
             				@QueryParam("rt") String rt) {
     	String result =  "";
