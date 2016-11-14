@@ -14,7 +14,7 @@ public class ConstsPOC {
     // maximum number of attempts to deploy the zip file
 	public static final int MAX_NUM_POLL_REQUESTS = 50;
 	
-	public static final String WORKING_DIR = "tmp/";
+	public static final String WORKING_DIR = "/tmp/";
 	
 	public static final String ZIP_FILE = WORKING_DIR + "components.zip";
 
