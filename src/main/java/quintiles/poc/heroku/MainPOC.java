@@ -66,7 +66,7 @@ public class MainPOC {
 
 	}
 
-	private static void pracessData() throws ConnectionException, FileNotFoundException, ParserConfigurationException, SAXException, IOException {
+	public static String pracessData() throws ConnectionException, FileNotFoundException, ParserConfigurationException, SAXException, IOException {
 		ProfileDescribe profileDescribe = null;
 		LayoutDescribe layoutDescribe = null;
 		SobjectDescribe sobjectDescribe = null;
@@ -119,6 +119,8 @@ public class MainPOC {
 		JSONObject jsonObject = new JSONObject(layoutContent);
 		String myJson  = jsonObject.toString();
 		System.out.println(myJson);
+		
+		return myJson;
 	}
 
 	private static String getUserProfile(String profileId) throws ConnectionException {

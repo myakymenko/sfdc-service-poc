@@ -14,6 +14,7 @@ import com.sforce.ws.ConnectionException;
 
 import quintiles.poc.heroku.ConnectionUtil;
 import quintiles.poc.heroku.ConstsPOC;
+import quintiles.poc.heroku.MainPOC;
 import quintiles.poc.heroku.MetadataUtil;
 
 /**
@@ -47,6 +48,8 @@ public class MyResource {
 			metadataConnection = ConnectionUtil.getSOAPMetadataConnection(loginResult);
 			
 			MetadataUtil.retrieveMetadata(metadataConnection);
+			
+			MainPOC.pracessData();
     	} catch (Exception e) {
     		result = e.getCause().getMessage();
     	}
