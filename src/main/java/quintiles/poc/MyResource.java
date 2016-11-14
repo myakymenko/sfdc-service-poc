@@ -94,4 +94,24 @@ public class MyResource {
     	}
 		return result;
 	}
+    
+    @GET
+    @Path("sobjectRTLayouts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getLayoutsByRecordType(@QueryParam("sObjectName") String sObjectName,
+            				@QueryParam("userId") String userId,
+            				@QueryParam("rt") String rt) {
+    	String result =  "";
+    	
+    	if ("Account".equals(sObjectName)) {
+	    	if ("0050Y0000010Z9mQAE".equals(userId)) {
+	    		result = "[[{\"sectionName\":\"Address Information\",\"fields\":[{\"readonly\":false,\"name\":\"BillingAddress\",\"section\":\"Address Information\",\"label\":null,\"required\":false},{\"readonly\":false,\"name\":\"ShippingAddress\",\"section\":\"Address Information\",\"label\":null,\"required\":false}]},{\"sectionName\":\"Account Information\",\"fields\":[{\"readonly\":false,\"name\":\"Test_1\",\"section\":\"Account Information\",\"label\":\"Test_1__c\",\"required\":false}]},{\"sectionName\":\"Description Information\",\"fields\":[{\"readonly\":false,\"name\":\"Description\",\"section\":\"Description Information\",\"label\":null,\"required\":false}]}],[{\"sectionName\":\"Address Information\",\"fields\":[{\"readonly\":false,\"name\":\"BillingAddress\",\"section\":\"Address Information\",\"label\":null,\"required\":false},{\"readonly\":false,\"name\":\"ShippingAddress\",\"section\":\"Address Information\",\"label\":null,\"required\":false}]},{\"sectionName\":\"Account Information\",\"fields\":[{\"readonly\":false,\"name\":\"Test_2\",\"section\":\"Account Information\",\"label\":\"Test_2__c\",\"required\":false}]},{\"sectionName\":\"Description Information\",\"fields\":[{\"readonly\":false,\"name\":\"Description\",\"section\":\"Description Information\",\"label\":null,\"required\":false}]}],[{\"sectionName\":\"Address Information\",\"fields\":[{\"readonly\":false,\"name\":\"BillingAddress\",\"section\":\"Address Information\",\"label\":null,\"required\":false},{\"readonly\":false,\"name\":\"ShippingAddress\",\"section\":\"Address Information\",\"label\":null,\"required\":false}]},{\"sectionName\":\"Account Information\",\"fields\":[{\"readonly\":false,\"name\":\"Test_3\",\"section\":\"Account Information\",\"label\":\"Test_3__c\",\"required\":false}]},{\"sectionName\":\"Description Information\",\"fields\":[{\"readonly\":false,\"name\":\"Description\",\"section\":\"Description Information\",\"label\":null,\"required\":false}]}]]";
+	    	} else {
+	    		result = "{\"error\":\"User with Id = '" + userId + "'was not found\"}";
+	    	}
+    	} else {
+    		result = "{\"error\":\"'" + sObjectName + "' SObject was not found\"}";
+    	}
+		return result;
+	}
 }

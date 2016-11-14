@@ -154,13 +154,6 @@ public class MainPOC {
 
 		ProfileHandler handler = new ProfileHandler(objectName, recordTypeName);
 		parser.parse(new FileInputStream(profile), handler);
-		/*System.out.println("**** " + handler.getProfileDescribe().getLayoutName());
-		for (FieldItem emp : handler.getProfileDescribe().getFields()) {
-			System.out.println(emp.getLabel() + " " + emp.getName() + " " + emp.getSection());
-			System.out.println("Readonly = " + emp.isReadonly() + "; Required = " + emp.isRequired());
-			
-			System.out.println("-----");
-		}*/
 		
 		return handler.getProfileDescribe(); 
 	}
@@ -171,14 +164,6 @@ public class MainPOC {
 
 		LayoutHandler handler = new LayoutHandler();
 		parser.parse(new FileInputStream(layout), handler);
-
-		// Printing the list of FieldItems obtained from XML
-		/*for (FieldItem emp : handler.getLayoutDescribe().getFields()) {
-			System.out.println(emp.getLabel() + " " + emp.getName() + " " + emp.getSection());
-			System.out.println("Readonly = " + emp.isReadonly() + "; Required = " + emp.isRequired());
-			
-			System.out.println("-----");
-		}*/
 		
 		return handler.getLayoutDescribe();
 	}
@@ -189,14 +174,6 @@ public class MainPOC {
 		
 		SobjectHandler handler = new SobjectHandler();
 		parser.parse(new FileInputStream(sobject), handler);
-		
-		// Printing the list of FieldItems obtained from XML
-		/*for (FieldItem emp : handler.getSobjectDescribe().getFields()) {
-			System.out.println(emp.getLabel() + " " + emp.getName() + " " + emp.getSection());
-			System.out.println("Readonly = " + emp.isReadonly() + "; Required = " + emp.isRequired());
-			
-			System.out.println("-----");
-		}*/
 		
 		return handler.getSobjectDescribe();
 	}
