@@ -1,31 +1,7 @@
 package quintiles.poc.heroku;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.json.JSONObject;
-import org.xml.sax.SAXException;
-
-import com.sforce.soap.enterprise.EnterpriseConnection;
-import com.sforce.soap.enterprise.GetUserInfoResult;
-import com.sforce.soap.enterprise.LoginResult;
-import com.sforce.soap.enterprise.QueryResult;
-import com.sforce.soap.enterprise.sobject.Profile;
-import com.sforce.soap.metadata.MetadataConnection;
-import com.sforce.ws.ConnectionException;
-
 public class MainPOC {
-
+/*
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 	private static EnterpriseConnection connection;
@@ -196,6 +172,6 @@ public class MainPOC {
 		// wait for the user input.
 		String choice = reader.readLine();
 		return choice != null ? choice.trim() : "";
-	}
+	}*/
 
 }

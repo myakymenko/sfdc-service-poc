@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,11 +16,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.json.JSONObject;
 import org.xml.sax.SAXException;
 
+import com.google.gson.Gson;
 import com.sforce.soap.enterprise.EnterpriseConnection;
-import com.sforce.soap.enterprise.GetUserInfoResult;
 import com.sforce.soap.enterprise.LoginResult;
 import com.sforce.soap.enterprise.QueryResult;
 import com.sforce.soap.enterprise.sobject.Profile;
@@ -32,9 +30,9 @@ import com.sforce.ws.ConnectionException;
 import quintiles.poc.heroku.ConnectionUtil;
 import quintiles.poc.heroku.ConstsPOC;
 import quintiles.poc.heroku.FieldItem;
+import quintiles.poc.heroku.Layout;
 import quintiles.poc.heroku.LayoutDescribe;
 import quintiles.poc.heroku.LayoutHandler;
-import quintiles.poc.heroku.MainPOC;
 import quintiles.poc.heroku.MetadataUtil;
 import quintiles.poc.heroku.ProfileDescribe;
 import quintiles.poc.heroku.ProfileHandler;
@@ -61,7 +59,7 @@ public class MyResource {
         return "Hello, Heroku!";
     }
     
-    @GET
+    /*@GET
     @Path("login")
     @Produces(MediaType.TEXT_PLAIN)
     public String setUpConnetions() {
@@ -78,7 +76,7 @@ public class MyResource {
     		result = e.getCause().getMessage();
     	}
 		return result;
-	}
+	}*/
     
     @GET
     @Path("sobjectLayout")
@@ -183,8 +181,6 @@ public class MyResource {
 		
 		
 		if (!profileLayouts.isEmpty()) {
-			System.out.println("LAYOUTS IN PROFILE");
-			System.out.println(profileLayouts);
 			layoutDescribes = getLayoutDescribe2(profileLayouts);
 			
 			File foundSobject = searchFile(objectName + ".object", new File(ConstsPOC.WORKING_DIR));
@@ -194,7 +190,7 @@ public class MyResource {
 		}
 		
 		
-		for (LayoutDescribe layoutDescribe : layoutDescribes) {
+		/*for (LayoutDescribe layoutDescribe : layoutDescribes) {
 			HashMap<String, ArrayList<FieldItem>> layoutContent = new HashMap<String, ArrayList<FieldItem>>();
 			ArrayList<FieldItem> layoutItems = layoutDescribe.getFields();
 			for (FieldItem fieldItem : layoutItems) {
@@ -218,7 +214,51 @@ public class MyResource {
 			String myJson  = jsonObject.toString();
 		}
 		
-		return "" + layoutDescribes.size();
+		return "" + layoutDescribes.size();*/
+		ArrayList<Layout> result = new ArrayList<>();
+		for (LayoutDescribe layoutDescribe : layoutDescribes) {
+			HashMap<String, ArrayList<FieldItem>> layoutContent = new HashMap<String, ArrayList<FieldItem>>();
+			ArrayList<FieldItem> layoutItems = layoutDescribe.getFields();
+			String layoutName = layoutDescribe.getLayoutName();
+			Layout layout = new Layout();
+			layout.setLayoutName(layoutName);
+			
+			for (FieldItem fieldItem : layoutItems) {
+				if (profileDescribe.containsField(fieldItem)) {
+					//System.out.println(fieldItem.getName());
+					FieldItem objectFieldItem = sobjectDescribe.getField(fieldItem);
+					fieldItem.setLabel(objectFieldItem.getLabel());
+					String section = fieldItem.getSection();
+					ArrayList<FieldItem> sectionFields = layoutContent.get(section);
+					
+					if (sectionFields == null) {
+						sectionFields = new ArrayList<FieldItem>();
+					}
+					
+					sectionFields.add(fieldItem);
+					
+					layoutContent.put(section, sectionFields);
+				}
+			}
+			
+			layout.setFieldSections(layoutContent);
+			result.add(layout);
+			/*JSONObject jsonObject = new JSONObject(layoutContent);
+			String myJson  = jsonObject.toString();
+			
+			result.add(myJson);
+			System.out.println(myJson);
+			
+			String jsonString = new Gson().toJson(layoutContent);
+			System.out.println(jsonString);*/
+
+		}
+		
+		
+		
+		String jsonString = new Gson().toJson(result);
+		
+		return jsonString;
 	}
     
     private String getUserProfile2(String userId) throws ConnectionException {
@@ -239,13 +279,16 @@ public class MyResource {
 		for (String layout : layouts) {
 			File foundLayout = searchFile(layout + ".layout", new File(ConstsPOC.WORKING_DIR));
 			parser.parse(new FileInputStream(foundLayout), handler);
-			result.add(handler.getLayoutDescribe());
+			
+			LayoutDescribe layoutDescribe = handler.getLayoutDescribe();
+			layoutDescribe.setLayoutName(layout);
+			result.add(layoutDescribe);
 			
 		}
 		return result;
 	}
     
-    public String pracessData() throws ConnectionException, FileNotFoundException, ParserConfigurationException, SAXException, IOException {
+    /*public String pracessData() throws ConnectionException, FileNotFoundException, ParserConfigurationException, SAXException, IOException {
 		ProfileDescribe profileDescribe = null;
 		LayoutDescribe layoutDescribe = null;
 		SobjectDescribe sobjectDescribe = null;
@@ -300,7 +343,7 @@ public class MyResource {
 		System.out.println(myJson);
 		
 		return myJson;
-	}
+	}*/
 
 	private String getUserProfile(String profileId) throws ConnectionException {
 		QueryResult queryResults = connection.query("SELECT Id, Name FROM Profile WHERE Id = '" + profileId + "'");

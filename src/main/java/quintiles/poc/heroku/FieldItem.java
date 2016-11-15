@@ -2,8 +2,6 @@ package quintiles.poc.heroku;
 
 import java.util.Objects;
 
-import org.json.JSONObject;
-
 public class FieldItem {
 	
 	private String name;
@@ -56,10 +54,4 @@ public class FieldItem {
 	    
 	    return Objects.equals(this.name, fieldItem.name);
 	}
-	
-	public String toString() { 
-		JSONObject jsonObject = new JSONObject(this);
-		String json  = jsonObject.toString();
-        return json;
-     } 
 }

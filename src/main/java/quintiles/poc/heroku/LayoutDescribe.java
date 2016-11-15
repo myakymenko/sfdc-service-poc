@@ -4,7 +4,17 @@ import java.util.ArrayList;
 
 public class LayoutDescribe {
 	
+private String layoutName = null;
+	
 	private ArrayList<FieldItem> fields = new ArrayList<FieldItem>();
+
+	public String getLayoutName() {
+		return layoutName;
+	}
+
+	public void setLayoutName(String layoutName) {
+		this.layoutName = layoutName;
+	}
 
 	public void setField(FieldItem field) {
 		this.fields.add(field);
