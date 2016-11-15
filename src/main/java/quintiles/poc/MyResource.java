@@ -25,6 +25,7 @@ import com.sforce.soap.enterprise.GetUserInfoResult;
 import com.sforce.soap.enterprise.LoginResult;
 import com.sforce.soap.enterprise.QueryResult;
 import com.sforce.soap.enterprise.sobject.Profile;
+import com.sforce.soap.enterprise.sobject.User;
 import com.sforce.soap.metadata.MetadataConnection;
 import com.sforce.ws.ConnectionException;
 
@@ -71,11 +72,7 @@ public class MyResource {
 			metadataConnection = ConnectionUtil.getSOAPMetadataConnection(loginResult);
 			
 			MetadataUtil.retrieveMetadata(metadataConnection);
-			System.out.println("-------------");
-			System.out.println("-------------");
-			System.out.println("-------------");
-			System.out.println("-------------");
-			System.out.println("-------------");
+
 			result = pracessData();
     	} catch (Exception e) {
     		result = e.getCause().getMessage();
@@ -110,8 +107,9 @@ public class MyResource {
     @Path("sobjectLayouts")
     @Produces(MediaType.APPLICATION_JSON)
     public String getLayouts(@QueryParam("sObjectName") String sObjectName,
-            				@QueryParam("userId") String userId) {
-    	String result =  "";
+            				@QueryParam("userId") String userId,
+            				@QueryParam("rt") String rt) {
+    	/*String result =  "";
     	
     	if ("Account".equals(sObjectName)) {
 	    	if ("0050Y0000010Z9mQAE".equals(userId)) {
@@ -121,7 +119,21 @@ public class MyResource {
 	    	}
     	} else {
     		result = "{\"error\":\"'" + sObjectName + "' SObject was not found\"}";
+    	}*/
+    	
+    	String result = "It works";
+    	try {
+			connection = ConnectionUtil.getSOAPConnection(ConstsPOC.URL);
+			loginResult = connection.login(ConstsPOC.USERNAME, ConstsPOC.PASSWORD);
+			metadataConnection = ConnectionUtil.getSOAPMetadataConnection(loginResult);
+			
+			MetadataUtil.retrieveMetadata(metadataConnection);
+
+			result = pracessData2(sObjectName, userId, rt);
+    	} catch (Exception e) {
+    		result = e.getCause().getMessage();
     	}
+		
 		return result;
 	}
     
@@ -145,6 +157,93 @@ public class MyResource {
 	}
     
     //---------------
+    
+    private String pracessData2(String objectName, String userId, String rt) throws ConnectionException, FileNotFoundException, ParserConfigurationException, SAXException, IOException {
+		ProfileDescribe profileDescribe = null;
+		ArrayList<LayoutDescribe> layoutDescribes = null;
+		SobjectDescribe sobjectDescribe = null;
+		/*
+		GetUserInfoResult userInfo = connection.getUserInfo();
+		String profileId = userInfo.getProfileId();*/
+
+		String profileName = getUserProfile2(userId);
+		if ("System Administrator".equals(profileName)) {
+			profileName =  "Admin";
+		}
+		
+		System.out.println("===== Found Profile : " + profileName);
+
+		File foundProfile = searchFile(profileName + ".profile", new File(ConstsPOC.WORKING_DIR));
+		System.out.println("===== Profile for search " + profileName + ".profile");
+		System.out.println("===== Found Profile file : " + foundProfile);
+		
+		profileDescribe = getProfileDescribe(foundProfile, objectName, rt);
+		
+		ArrayList<String> profileLayouts = profileDescribe.getLayouts();
+		
+		
+		if (!profileLayouts.isEmpty()) {
+			System.out.println("LAYOUTS IN PROFILE");
+			System.out.println(profileLayouts);
+			layoutDescribes = getLayoutDescribe2(profileLayouts);
+			
+			File foundSobject = searchFile(objectName + ".object", new File(ConstsPOC.WORKING_DIR));
+			System.out.println("===== Found Sobject file : " + foundSobject);
+			
+			sobjectDescribe = getSobjectDescribe(foundSobject);
+		}
+		
+		
+		for (LayoutDescribe layoutDescribe : layoutDescribes) {
+			HashMap<String, ArrayList<FieldItem>> layoutContent = new HashMap<String, ArrayList<FieldItem>>();
+			ArrayList<FieldItem> layoutItems = layoutDescribe.getFields();
+			for (FieldItem fieldItem : layoutItems) {
+				if (profileDescribe.containsField(fieldItem)) {
+					System.out.println(fieldItem.getName());
+					FieldItem objectFieldItem = sobjectDescribe.getField(fieldItem);
+					fieldItem.setLabel(objectFieldItem.getLabel());
+					String section = fieldItem.getSection();
+					ArrayList<FieldItem> sectionFields = layoutContent.get(section);
+					
+					if (sectionFields == null) {
+						sectionFields = new ArrayList<FieldItem>();
+					}
+					
+					sectionFields.add(fieldItem);
+					
+					layoutContent.put(section, sectionFields);
+				}
+			}
+			JSONObject jsonObject = new JSONObject(layoutContent);
+			String myJson  = jsonObject.toString();
+		}
+		
+		return "" + layoutDescribes.size();
+	}
+    
+    private String getUserProfile2(String userId) throws ConnectionException {
+		QueryResult queryResults = connection.query("SELECT Id, ProfileId, Profile.Name FROM User WHERE Id = '" + userId + "'");
+		User user = (User) queryResults.getRecords()[0];
+		Profile profile = user.getProfile();
+		return profile.getName();
+	}
+    
+    private ArrayList<LayoutDescribe> getLayoutDescribe2(ArrayList<String> layouts) throws ParserConfigurationException, SAXException, IOException {
+		ArrayList<LayoutDescribe> result = new ArrayList<>();
+		
+		SAXParserFactory parserFactor = SAXParserFactory.newInstance();
+		SAXParser parser = parserFactor.newSAXParser();
+
+		LayoutHandler handler = new LayoutHandler();
+		
+		for (String layout : layouts) {
+			File foundLayout = searchFile(layout + ".layout", new File(ConstsPOC.WORKING_DIR));
+			parser.parse(new FileInputStream(foundLayout), handler);
+			result.add(handler.getLayoutDescribe());
+			
+		}
+		return result;
+	}
     
     public String pracessData() throws ConnectionException, FileNotFoundException, ParserConfigurationException, SAXException, IOException {
 		ProfileDescribe profileDescribe = null;

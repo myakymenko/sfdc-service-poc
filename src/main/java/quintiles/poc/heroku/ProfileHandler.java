@@ -92,9 +92,17 @@ public class ProfileHandler extends DefaultHandler {
 			foundRtName = content;
 			break;
 		case PROFILE_ASSIGNMENT:
-			String rtObject = sObject + "." + rtName;
-			if (rtObject.equals(foundRtName)) {
-				profileDescribe.setLayoutName(foundLayoutName);
+			if (rtName == null) {
+				if (foundLayoutName.startsWith(sObject + "-")) {
+					//profileDescribe.setLayoutName(foundLayoutName);
+					profileDescribe.setLayout(foundLayoutName);
+				}
+			} else {
+				String rtObject = sObject + "." + rtName;
+				if (rtObject.equals(foundRtName)) {
+					//profileDescribe.setLayoutName(foundLayoutName);
+					profileDescribe.setLayout(foundLayoutName);
+				}
 			}
 			break;
 		}
