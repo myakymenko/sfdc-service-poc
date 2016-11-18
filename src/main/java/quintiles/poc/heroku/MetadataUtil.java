@@ -52,7 +52,8 @@ public class MetadataUtil {
 	
 	        try {
 	            os.write(result.getZipFile());
-	            UtilPOC.unzipFunction(ConstsPOC.WORKING_DIR, ConstsPOC.ZIP_FILE);
+	            //UtilPOC.unzipFunction(ConstsPOC.WORKING_DIR, ConstsPOC.ZIP_FILE);
+	            Utils.unzipFunction(ConstsPOC.WORKING_DIR, ConstsPOC.ZIP_FILE);
 	        } finally {
 	            os.close();
 	        }
@@ -109,9 +110,9 @@ public class MetadataUtil {
 		com.sforce.soap.metadata.Package packageManifest = null;
 		HashMap<String, String[]> retrieveConfig = new HashMap<String, String[]>();
 		//retrieveConfig.put("Layout",new String[]{"Account-TestAcc1", "Account-Account Layout", "Account-TestAcc2"});
-		retrieveConfig.put("Layout",new String[]{"*"});
-		retrieveConfig.put("Profile",new String[]{"*"});
-		retrieveConfig.put("CustomObject",new String[]{"Account"});
+		retrieveConfig.put(ConstsPOC.METADATA_LAYOUT, ConstsPOC.METADATA_LAYOUT_RETRIEVE);
+		retrieveConfig.put(ConstsPOC.METADATA_PROFILE, ConstsPOC.METADATA_PROFILE_RETRIEVE);
+		retrieveConfig.put(ConstsPOC.METADATA_CUSTOM_OBJECT, ConstsPOC.METADATA_CUSTOM_OBJECT_RETRIEVE);
 		
 		List<PackageTypeMembers> pkgMembers = new ArrayList<>();
 		

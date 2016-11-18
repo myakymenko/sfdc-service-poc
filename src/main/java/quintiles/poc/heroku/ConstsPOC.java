@@ -22,5 +22,19 @@ public class ConstsPOC {
 
     // manifest file that controls which components get retrieved
 	//public static final String MANIFEST_FILE = WORKING_DIR + "package.xml";
-	public static final String MANIFEST_FILE = "/classes/package.xml";
+	//public static final String MANIFEST_FILE = "/classes/package.xml";
+	
+	public static final String METADATA_PROFILE = "Profile";
+	public static final String METADATA_CUSTOM_OBJECT = "CustomObject";
+	public static final String METADATA_LAYOUT = "Layout";
+	
+	public static final String[] METADATA_PROFILE_RETRIEVE = new String[]{"*"};
+	public static final String[] METADATA_LAYOUT_RETRIEVE = new String[]{"*"};
+	public static final String[] METADATA_CUSTOM_OBJECT_RETRIEVE = new String[] { "Account", "Contact" , "Case" , "Event" , "Task"};
+	
+	public static final String METADATA_PROFILE_EXT = ".profile";
+	public static final String METADATA_OBJECT_EXT = ".object";
+	public static final String METADATA_LAYOUT_EXT = ".layout";
+	
+	public static final String MSG_URI_EXCEPTION = "Profile was not found. userId parameter is missed or incorrect.";
 }

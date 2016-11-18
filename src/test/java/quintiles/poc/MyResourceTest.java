@@ -24,6 +24,6 @@ public class MyResourceTest extends JerseyTest {
     public void testGetIt() {
         final String responseMsg = target().path("layouts").request().get(String.class);
 
-        assertEquals("Hello, Heroku!", responseMsg);
+        assertEquals("Web app is alieve", responseMsg);
     }
 }
