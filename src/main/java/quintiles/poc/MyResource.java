@@ -29,6 +29,7 @@ import com.sforce.soap.enterprise.sobject.User;
 import com.sforce.soap.metadata.MetadataConnection;
 import com.sforce.ws.ConnectionException;
 
+import quintiles.poc.container.LayoutItem;
 import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.heroku.ConnectionUtil;
 import quintiles.poc.heroku.ConstsPOC;
@@ -148,30 +149,20 @@ public class MyResource {
 		return layoutMetadata;
 	}
 	
-	private String getJSON(List<Object> objects) {
+	private String getJSON(ArrayList<LayoutItem> layouts) {
 		String jsonString = "";
-		if (objects == null || objects.isEmpty())
+		if (layouts == null || layouts.isEmpty())
 			return jsonString;
 		
-		if (objects.size() > 1) {
-			jsonString = new Gson().toJson(objects);
+		if (layouts.size() > 1) {
+			jsonString = new Gson().toJson(layouts);
 		} else {
-			jsonString = new Gson().toJson(objects.get(0));
+			jsonString = new Gson().toJson(layouts.get(0));
 		}
 		
 		return jsonString;
 	}
-	
-	private String getJSON(Object object) {
-		String jsonString = "";
-		if (object != null) {
-			jsonString = getJSON(Arrays.asList(object));
-		}
-		return jsonString;
-	}
-	
-	
-    
+   
     @GET
     @Path("sobjectLayouts")
     @Produces(MediaType.APPLICATION_JSON)
