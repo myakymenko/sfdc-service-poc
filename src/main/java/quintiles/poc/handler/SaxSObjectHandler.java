@@ -15,6 +15,14 @@ public class SaxSObjectHandler extends DefaultHandler {
 	public static final String OBJ_TAG_FULLNAME = "fullName";
 	public static final String OBJ_TAG_LABEL = "label";
 
+	public static final ArrayList<String> SKIP_TAGS = new ArrayList<String>(){
+		{
+			add("valueSet");
+			add("recordTypes");
+			add("businessProcesses");
+		}
+	};
+	
 	private ArrayList<FieldItem> fieldItemList = new ArrayList<>();
 	private FieldItem fieldItem = null;
 	private String content = null;
@@ -34,10 +42,12 @@ public class SaxSObjectHandler extends DefaultHandler {
 		// Create a new FieldItem object when the start tag is found
 		case OBJ_TAG_FIELDS:
 			fieldItem = new FieldItem();
-			ignoreTags = false;
+			//ignoreTags = false;
+			//System.out.println("Start field tag : " + ignoreTags);
 			break;
 		default:
-			ignoreTags = true;
+			if (SKIP_TAGS.contains(qName))
+				ignoreTags = true;
 		}
 	}
 
@@ -46,17 +56,23 @@ public class SaxSObjectHandler extends DefaultHandler {
 		switch (qName) {
 		// Add the FieldItem to list once end tag is found
 		case OBJ_TAG_FIELDS:
+			
 			fieldItemList.add(fieldItem);
 			break;
 		// For all other end tags the FieldItem has to be updated.
 		case OBJ_TAG_FULLNAME:
+			//System.out.println("end name tag : " + ignoreTags);
 			if (!ignoreTags)
 				fieldItem.setName(content);
 			break;
 		case OBJ_TAG_LABEL:
+			//System.out.println("end label tag : " + ignoreTags);
 			if (!ignoreTags)
 				fieldItem.setLabel(content);
 			break;
+		default:
+			if (SKIP_TAGS.contains(qName))
+				ignoreTags = false;
 		}
 	}
 
