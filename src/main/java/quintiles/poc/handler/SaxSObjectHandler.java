@@ -11,7 +11,6 @@ import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.container.SObjectItem;
 
 public class SaxSObjectHandler extends DefaultHandler {
-	public static final String OBJ_TAG_VALUESET = "valueSet";
 	public static final String OBJ_TAG_FIELDS = "fields";
 	public static final String OBJ_TAG_FULLNAME = "fullName";
 	public static final String OBJ_TAG_LABEL = "label";
@@ -37,7 +36,7 @@ public class SaxSObjectHandler extends DefaultHandler {
 			fieldItem = new FieldItem();
 			ignoreTags = false;
 			break;
-		case OBJ_TAG_VALUESET:
+		default:
 			ignoreTags = true;
 		}
 	}
@@ -52,11 +51,11 @@ public class SaxSObjectHandler extends DefaultHandler {
 		// For all other end tags the FieldItem has to be updated.
 		case OBJ_TAG_FULLNAME:
 			if (!ignoreTags)
-				// System.out.println("Field " + content);
 				fieldItem.setName(content);
 			break;
 		case OBJ_TAG_LABEL:
-			fieldItem.setLabel(content);
+			if (!ignoreTags)
+				fieldItem.setLabel(content);
 			break;
 		}
 	}
