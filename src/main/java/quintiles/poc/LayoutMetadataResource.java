@@ -28,7 +28,7 @@ import quintiles.poc.heroku.MetadataUtil;
 import quintiles.poc.heroku.Utils;
 import quintiles.poc.heroku.XmlSaxProcessor;
 
-@Path("layouts2")
+@Path("layouts")
 public class LayoutMetadataResource {
 	private EnterpriseConnection connection;
 	private MetadataConnection metadataConnection;
