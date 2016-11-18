@@ -1,5 +1,7 @@
 package quintiles.poc.heroku;
 
+import java.util.HashMap;
+
 public class ConstsPOC {
 	//public static final String
 	public static final double API_VERSION = 38.0;
@@ -35,6 +37,12 @@ public class ConstsPOC {
 	public static final String METADATA_PROFILE_EXT = ".profile";
 	public static final String METADATA_OBJECT_EXT = ".object";
 	public static final String METADATA_LAYOUT_EXT = ".layout";
+	
+	public static final HashMap<String, String> MISMATCH_PROFILE_NAMES = new HashMap<String, String>(){
+		{
+			put("System Administrator", "Admin");
+		}
+	};
 	
 	public static final String MSG_URI_EXCEPTION = "Profile was not found. userId parameter is missed or incorrect.";
 }

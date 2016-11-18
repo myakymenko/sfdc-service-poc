@@ -119,11 +119,10 @@ public class MyResource {
 			metadataConnection = ConnectionUtil.getSOAPMetadataConnection(loginResult);
 			
 			MetadataUtil.retrieveMetadata(metadataConnection);
-			
 			LayoutMetadata layoutMetadata = initMetadata(sObjectName, userId, rt);
 			XmlSaxProcessor processor = new XmlSaxProcessor();
 			processor.processMetadata(layoutMetadata);
-			
+			System.out.println("Finish processing");
 			result = getJSON(layoutMetadata.getLayouts());
 			//result = pracessData2(sObjectName, userId, rt);
     	} catch (Exception e) {
@@ -288,7 +287,14 @@ public class MyResource {
 		QueryResult queryResults = connection.query("SELECT Id, ProfileId, Profile.Name FROM User WHERE Id = '" + userId + "'");
 		User user = (User) queryResults.getRecords()[0];
 		Profile profile = user.getProfile();
-		return profile.getName();
+		
+		String profileName = profile.getName();
+				
+		if (ConstsPOC.MISMATCH_PROFILE_NAMES.containsKey(profileName)) {
+			profileName = ConstsPOC.MISMATCH_PROFILE_NAMES.get(profileName);
+		}
+		
+		return profileName;
 	}
     
     private ArrayList<LayoutDescribe> getLayoutDescribe2(ArrayList<String> layouts) throws ParserConfigurationException, SAXException, IOException {

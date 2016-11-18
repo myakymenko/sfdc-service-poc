@@ -29,12 +29,13 @@ public class XmlSaxProcessor {
 	}
 	
 	public void processMetadata(LayoutMetadata layoutMetadata) throws SAXException, IOException {
-		
+		System.out.println("Start processing");
 		processSObjectMetadata(layoutMetadata);
-		
+		System.out.println("Sobject");
 		processProfileMetadata(layoutMetadata);
-		
+		System.out.println("Profile");
 		processLayoutMetadata(layoutMetadata);
+		System.out.println("layout");
 	}
 	
 	private void processSObjectMetadata(LayoutMetadata layoutMetadata) throws SAXException, IOException {
