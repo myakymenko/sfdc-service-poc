@@ -25,6 +25,8 @@ import com.sforce.soap.enterprise.EnterpriseConnection;
 import com.sforce.soap.enterprise.LoginResult;
 import com.sforce.soap.enterprise.QueryResult;
 import com.sforce.soap.enterprise.sobject.Profile;
+import com.sforce.soap.enterprise.sobject.RecordType;
+import com.sforce.soap.enterprise.sobject.SObject;
 import com.sforce.soap.enterprise.sobject.User;
 import com.sforce.soap.metadata.MetadataConnection;
 import com.sforce.ws.ConnectionException;
@@ -124,6 +126,7 @@ public class MyResource {
 			XmlSaxProcessor processor = new XmlSaxProcessor();
 			processor.processMetadata(layoutMetadata);
 			System.out.println("Finish processing");
+			getRecordTypes(layoutMetadata);
 			result = getJSON(layoutMetadata.getLayouts());
 			//result = pracessData2(sObjectName, userId, rt);
     	} catch (Exception e) {
@@ -147,6 +150,43 @@ public class MyResource {
 		}
 		
 		return layoutMetadata;
+	}
+	
+	private String getRecordTypes(LayoutMetadata layoutResp) throws ConnectionException {
+		ArrayList<LayoutItem> layouts = layoutResp.getLayouts();
+		
+		ArrayList<String> rtNames = new ArrayList<>();
+		for (LayoutItem layoutItem : layouts) {
+			String rtName = layoutItem.getSubtype();
+			if (!Utils.isBlankString(rtName)) {
+				rtNames.add(rtName);
+			}
+		}
+		
+		String recordTypes = String.join("','", rtNames);
+		String sObjects = String.join("','", layoutResp.getProcessedObjects());
+		String query = "SELECT Id, DeveloperName, SobjectType FROM RecordType WHERE DeveloperName IN ('" + recordTypes + "') AND SobjectType IN ('" + sObjects + "')";
+		QueryResult queryResults = connection.query(query);
+		SObject[] profile = queryResults.getRecords();
+		
+		
+		HashMap<String, String> layoutToRt = new HashMap<>();
+		
+		for (int i = 0; i < profile.length; i++) {
+			RecordType recordType = (RecordType)profile[i];
+			
+			String key = recordType.getSobjectType() + recordType.getDeveloperName();
+			String value = recordType.getId();
+			layoutToRt.put(key, value);
+		}
+		
+		for (LayoutItem layoutItem : layouts) {
+			String key = layoutItem.getType() + layoutItem.getSubtype();
+			
+			layoutItem.setRecordTypeId(layoutToRt.get(key));
+		}
+		
+		return "";
 	}
 	
 	private String getJSON(ArrayList<LayoutItem> layouts) {
