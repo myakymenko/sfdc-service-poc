@@ -52,8 +52,10 @@ public class MetadataUtil {
 	
 	        try {
 	            os.write(result.getZipFile());
+	            System.out.println("Starting unzip");
 	            //UtilPOC.unzipFunction(ConstsPOC.WORKING_DIR, ConstsPOC.ZIP_FILE);
 	            Utils.unzipFunction(ConstsPOC.WORKING_DIR, ConstsPOC.ZIP_FILE);
+	            System.out.println("Finish unzip");
 	        } finally {
 	            os.close();
 	        }
