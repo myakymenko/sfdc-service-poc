@@ -1,8 +1,5 @@
 package quintiles.poc.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -23,9 +20,6 @@ public class SaxLayoutHandler extends DefaultHandler {
 	public static final String LAYOUT_VAL_READONLY = "Readonly";
 	public static final String LAYOUT_VAL_REQUIRED = "Required";
 		
-	private ArrayList<FieldItem> fieldItemList = new ArrayList<>();
-	private LayoutMetadata layoutMetadata = null;
-	
 	private LayoutItem layoutItem = null;
 	private SectionItem sectionItem = null;
 	
@@ -33,28 +27,12 @@ public class SaxLayoutHandler extends DefaultHandler {
 	private String content = null;
 	private String behavior = null;
 	private String section = null;
-	private String sObjectName = null;
 	private SObjectItem sObjectItem = null; 
 	
 	
 	public SaxLayoutHandler(LayoutMetadata layoutMetadata, String processedLayoutName) {
-		this.layoutMetadata = layoutMetadata;
 		this.layoutItem = layoutMetadata.getLayoutByName(processedLayoutName);
 		this.sObjectItem = layoutMetadata.getSObjectByName(layoutItem.getType());
-		//this.rtName = layoutMetadata.getRecordType();
-	}
-	
-	/*public LayoutDescribe getLayoutDescribe() {
-		return layoutDescribe;
-	}
-
-	public void setLayoutDescribe(LayoutDescribe layoutDescribe) {
-		this.layoutDescribe = layoutDescribe;
-	}*/
-
-	public SaxLayoutHandler() {
-		//this.layoutDescribe = new LayoutDescribe();
-		//this.fieldItemList = layoutDescribe.getFields();
 	}
 
 	@Override
@@ -95,11 +73,6 @@ public class SaxLayoutHandler extends DefaultHandler {
 			break;
 		case LAYOUT_TAG_BEHAVIOR:
 			behavior = content;
-			/*if (LAYOUT_VAL_REQUIRED.equals(content)) {
-				fieldItem.setRequired(true);
-			} else if (LAYOUT_VAL_READONLY.equals(content)) {
-				fieldItem.setReadonly(true);
-			}*/
 			break;
 		case LAYOUT_TAG_SECTION_LABEL:
 			section = content;

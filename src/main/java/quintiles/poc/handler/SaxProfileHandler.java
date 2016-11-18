@@ -13,6 +13,7 @@ import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.container.SObjectItem;
 
 public class SaxProfileHandler extends DefaultHandler {
+	
 	public static final String PROF_TAG_ITEM = "fieldPermissions";
 	public static final String PROF_TAG_ASSIGNMENT = "layoutAssignments";
 	
@@ -83,10 +84,6 @@ public class SaxProfileHandler extends DefaultHandler {
 			break;
 		// For all other end tags the FieldItem has to be updated.
 		case PROF_TAG_FIELD_NAME:
-			/*if (content.startsWith(sObject + ".") && readable) {
-				shouldBeAdded = true;
-				fieldItem.setName(content.substring(sObject.length()+1));
-			}*/
 			sObject = content.substring(0, content.indexOf(PROF_DOT_SEPARATOR));
 			
 			if (layoutMetadata.hasProcessedObject(sObject) && readable) {
@@ -119,10 +116,8 @@ public class SaxProfileHandler extends DefaultHandler {
 			sObject = foundLayoutName.substring(0, foundLayoutName.indexOf(PROF_MINUS_SEPARATOR));
 			
 			foundRtName = foundRtName != null ? foundRtName.substring(foundRtName.indexOf(PROF_DOT_SEPARATOR)+1) : foundRtName;
-			//String layoutName = foundLayoutName.substring(foundLayoutName.indexOf(PROF_MINUS_SEPARATOR)+1);
 			
 			if (layoutMetadata.hasProcessedObject(sObject)) {
-				//layoutItem.setName(layoutName);
 				layoutItem.setName(foundLayoutName);
 				layoutItem.setType(sObject);
 				layoutItem.setSubtype(foundRtName);

@@ -9,10 +9,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
-import com.google.gson.Gson;
-
-import quintiles.poc.heroku.Consts;
-import quintiles.poc.heroku.Utils;
 import quintiles.poc.container.LayoutItem;
 import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.handler.SaxLayoutHandler;
@@ -29,13 +25,9 @@ public class XmlSaxProcessor {
 	}
 	
 	public void processMetadata(LayoutMetadata layoutMetadata) throws SAXException, IOException {
-		System.out.println("Start processing");
 		processSObjectMetadata(layoutMetadata);
-		System.out.println("Sobject");
 		processProfileMetadata(layoutMetadata);
-		System.out.println("Profile");
 		processLayoutMetadata(layoutMetadata);
-		System.out.println("layout");
 	}
 	
 	private void processSObjectMetadata(LayoutMetadata layoutMetadata) throws SAXException, IOException {

@@ -11,9 +11,11 @@ import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.container.SObjectItem;
 
 public class SaxSObjectHandler extends DefaultHandler {
+	
 	public static final String OBJ_TAG_FIELDS = "fields";
 	public static final String OBJ_TAG_FULLNAME = "fullName";
 	public static final String OBJ_TAG_LABEL = "label";
+	public static final String OBJ_TAG_REFERENCE = "referenceTo";
 
 	public static final ArrayList<String> SKIP_TAGS = new ArrayList<String>(){
 		{
@@ -65,6 +67,11 @@ public class SaxSObjectHandler extends DefaultHandler {
 		case OBJ_TAG_LABEL:
 			if (!ignoreTags)
 				fieldItem.setLabel(content);
+			break;
+		case OBJ_TAG_REFERENCE:
+			//System.out.println("end label tag : " + ignoreTags);
+			if (!ignoreTags)
+				fieldItem.setRelatedObject(content);
 			break;
 		default:
 			if (SKIP_TAGS.contains(qName))

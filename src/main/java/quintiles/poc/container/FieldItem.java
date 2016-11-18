@@ -4,12 +4,13 @@ import java.util.Objects;
 
 public class FieldItem {
 	
-	private String name;
-	private String label;
 	private transient String section;
 	private transient String objectName;
+	private String name;
+	private String label;
 	private boolean required = false;
 	private boolean readonly = false;
+	private String relatedObject;
 	
 	public FieldItem() {
 	}
@@ -28,6 +29,12 @@ public class FieldItem {
 	}
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	public String getRelatedObject() {
+		return relatedObject;
+	}
+	public void setRelatedObject(String relatedObject) {
+		this.relatedObject = relatedObject;
 	}
 	public String getSection() {
 		return section;
