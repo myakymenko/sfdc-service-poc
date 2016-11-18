@@ -28,8 +28,8 @@ import quintiles.poc.heroku.MetadataUtil;
 import quintiles.poc.heroku.Utils;
 import quintiles.poc.heroku.XmlSaxProcessor;
 
-@Path("layouts")
-public class MyResource {
+@Path("layouts2")
+public class LayoutMetadataResource {
 	private EnterpriseConnection connection;
 	private MetadataConnection metadataConnection;
 	private LoginResult loginResult;
@@ -149,5 +149,4 @@ public class MyResource {
 
 		return profileName;
 	}
-
 }

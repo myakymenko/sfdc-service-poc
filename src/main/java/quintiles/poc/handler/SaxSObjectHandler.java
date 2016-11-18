@@ -42,8 +42,6 @@ public class SaxSObjectHandler extends DefaultHandler {
 		// Create a new FieldItem object when the start tag is found
 		case OBJ_TAG_FIELDS:
 			fieldItem = new FieldItem();
-			//ignoreTags = false;
-			//System.out.println("Start field tag : " + ignoreTags);
 			break;
 		default:
 			if (SKIP_TAGS.contains(qName))
@@ -61,12 +59,10 @@ public class SaxSObjectHandler extends DefaultHandler {
 			break;
 		// For all other end tags the FieldItem has to be updated.
 		case OBJ_TAG_FULLNAME:
-			//System.out.println("end name tag : " + ignoreTags);
 			if (!ignoreTags)
 				fieldItem.setName(content);
 			break;
 		case OBJ_TAG_LABEL:
-			//System.out.println("end label tag : " + ignoreTags);
 			if (!ignoreTags)
 				fieldItem.setLabel(content);
 			break;
