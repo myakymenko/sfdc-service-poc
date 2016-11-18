@@ -2,7 +2,7 @@ package quintiles.poc.heroku;
 
 import java.util.HashMap;
 
-public class ConstsPOC {
+public class Consts {
 	//public static final String
 	public static final double API_VERSION = 38.0;
 	public static final String URL = "https://login.salesforce.com/services/Soap/c/" + API_VERSION;

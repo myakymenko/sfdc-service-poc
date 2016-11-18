@@ -11,7 +11,7 @@ import org.xml.sax.SAXException;
 
 import com.google.gson.Gson;
 
-import quintiles.poc.heroku.ConstsPOC;
+import quintiles.poc.heroku.Consts;
 import quintiles.poc.heroku.Utils;
 import quintiles.poc.container.LayoutItem;
 import quintiles.poc.container.LayoutMetadata;
@@ -42,9 +42,9 @@ public class XmlSaxProcessor {
 		for (String sObjectName : layoutMetadata.getProcessedObjects()) {
 			SaxSObjectHandler handler = new SaxSObjectHandler(layoutMetadata, sObjectName);
 			
-			String metadataFileName = sObjectName + ConstsPOC.METADATA_OBJECT_EXT;
+			String metadataFileName = sObjectName + Consts.METADATA_OBJECT_EXT;
 			
-			FileInputStream foundSObject = Utils.getProcessedFileInputStream(metadataFileName, ConstsPOC.WORKING_DIR);
+			FileInputStream foundSObject = Utils.getProcessedFileInputStream(metadataFileName, Consts.WORKING_DIR);
 			parser.parse(foundSObject, handler);
 		}
 	}
@@ -52,9 +52,9 @@ public class XmlSaxProcessor {
 	private void processProfileMetadata(LayoutMetadata layoutMetadata) throws SAXException, IOException {
 			SaxProfileHandler handler = new SaxProfileHandler(layoutMetadata);
 			
-			String metadataFileName = layoutMetadata.getProfileName() + ConstsPOC.METADATA_PROFILE_EXT;
+			String metadataFileName = layoutMetadata.getProfileName() + Consts.METADATA_PROFILE_EXT;
 			
-			FileInputStream foundSObject = Utils.getProcessedFileInputStream(metadataFileName, ConstsPOC.WORKING_DIR);
+			FileInputStream foundSObject = Utils.getProcessedFileInputStream(metadataFileName, Consts.WORKING_DIR);
 			parser.parse(foundSObject, handler);
 	}
 	
@@ -63,9 +63,9 @@ public class XmlSaxProcessor {
 			String layoutName = layoutItem.getName();
 			SaxLayoutHandler handler = new SaxLayoutHandler(layoutMetadata, layoutName);
 			
-			String metadataFileName = layoutItem.getName() + ConstsPOC.METADATA_LAYOUT_EXT;
+			String metadataFileName = layoutItem.getName() + Consts.METADATA_LAYOUT_EXT;
 			
-			FileInputStream foundSObject = Utils.getProcessedFileInputStream(metadataFileName, ConstsPOC.WORKING_DIR);
+			FileInputStream foundSObject = Utils.getProcessedFileInputStream(metadataFileName, Consts.WORKING_DIR);
 			parser.parse(foundSObject, handler);
 		}
 	}

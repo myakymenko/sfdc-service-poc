@@ -14,8 +14,8 @@ public class ConnectionUtil {
 	public static EnterpriseConnection getSOAPConnection(String loginUrl) throws ConnectionException {
 		ConnectorConfig config = new ConnectorConfig();
 		config.setAuthEndpoint(loginUrl);
-		config.setUsername(ConstsPOC.USERNAME);
-		config.setPassword(ConstsPOC.PASSWORD);
+		config.setUsername(Consts.USERNAME);
+		config.setPassword(Consts.PASSWORD);
 		config.setServiceEndpoint(loginUrl);
 		//config.setManualLogin(true);
 		EnterpriseConnection connection = new EnterpriseConnection(config);
