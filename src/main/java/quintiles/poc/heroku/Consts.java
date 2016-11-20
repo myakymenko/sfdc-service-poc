@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Consts {
 	//public static final String
 	public static final double API_VERSION = 38.0;
-	public static final String URL = "https://login.salesforce.com/services/Soap/c/" + API_VERSION;
+	public static final String URL = "https://login.salesforce.com/services/Soap/u/" + API_VERSION;
 	//static final String URL = "https://eu5.salesforce.com/services/Soap/c/38.0";
 	/*public static final String USERNAME = "maxim.yakimenko@gmail.com.ceo";
 	public static final String PASSWORD = "max701198838hKFvJJPtHG8n3fnko8ymkKZ";*/
