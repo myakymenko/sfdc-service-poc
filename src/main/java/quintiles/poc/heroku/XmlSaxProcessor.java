@@ -16,7 +16,7 @@ import quintiles.poc.handler.SaxProfileHandler;
 import quintiles.poc.handler.SaxSObjectHandler;
 
 public class XmlSaxProcessor {
-
+/*
 	SAXParser parser = null;
 	
 	public XmlSaxProcessor() throws ParserConfigurationException, SAXException {
@@ -60,5 +60,5 @@ public class XmlSaxProcessor {
 			FileInputStream foundSObject = Utils.getProcessedFileInputStream(metadataFileName, Consts.WORKING_DIR);
 			parser.parse(foundSObject, handler);
 		}
-	}
+	}*/
 }

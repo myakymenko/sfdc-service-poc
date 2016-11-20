@@ -3,7 +3,9 @@ package quintiles.poc.container;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class LayoutMetadata {
+import quintiles.poc.api.IMetadata;
+
+public class LayoutMetadata implements IMetadata{
 	
 	private transient String profileName = null;
 	private transient String recordType = null;
@@ -13,6 +15,7 @@ public class LayoutMetadata {
 	private ProfileItem profile = null; 
 	private ArrayList<SObjectItem> sObjects = new ArrayList<>();
 	private ArrayList<LayoutItem> layouts = new ArrayList<>();
+	private ArrayList<LayoutItem> processedLayouts = new ArrayList<>();
 	
 	public LayoutMetadata() {
 	}
@@ -120,6 +123,18 @@ public class LayoutMetadata {
 	
 	public boolean containsLayout(LayoutItem layoutItem) {
 		return this.layouts.contains(layoutItem);
+	}
+
+	public ArrayList<LayoutItem> getProcessedLayouts() {
+		return processedLayouts;
+	}
+
+	public void setProcessedLayouts(ArrayList<LayoutItem> processedLayouts) {
+		this.processedLayouts = processedLayouts;
+	}
+	
+	public void setProcessedLayout(LayoutItem processedLayout) {
+		this.processedLayouts.add(processedLayout);
 	}
 
 	public boolean hasProcessedObject(String sObjectName) {

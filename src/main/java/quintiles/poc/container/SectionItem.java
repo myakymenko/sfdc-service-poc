@@ -9,6 +9,13 @@ public class SectionItem {
 
 	private ArrayList<FieldItem> fields = new ArrayList<>();
 	
+	public SectionItem() {
+	}
+	
+	public SectionItem(String name) {
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}

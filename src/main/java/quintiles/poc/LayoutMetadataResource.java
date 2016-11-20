@@ -1,36 +1,28 @@
 package quintiles.poc;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.google.gson.Gson;
-import com.sforce.soap.enterprise.EnterpriseConnection;
-import com.sforce.soap.enterprise.LoginResult;
-import com.sforce.soap.enterprise.QueryResult;
-import com.sforce.soap.enterprise.sobject.Profile;
-import com.sforce.soap.enterprise.sobject.RecordType;
-import com.sforce.soap.enterprise.sobject.SObject;
-import com.sforce.soap.enterprise.sobject.User;
 import com.sforce.soap.metadata.MetadataConnection;
+import com.sforce.soap.partner.LoginResult;
+import com.sforce.soap.partner.PartnerConnection;
+import com.sforce.soap.partner.QueryResult;
+import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
-import quintiles.poc.container.LayoutItem;
 import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.heroku.ConnectionUtil;
 import quintiles.poc.heroku.Consts;
 import quintiles.poc.heroku.MetadataUtil;
 import quintiles.poc.heroku.Utils;
-import quintiles.poc.heroku.XmlSaxProcessor;
+import quintiles.poc.heroku.XmlLayoutProcessor;
 
 @Path("layouts")
 public class LayoutMetadataResource {
-	private EnterpriseConnection connection;
+	private PartnerConnection connection;
 	private MetadataConnection metadataConnection;
 	private LoginResult loginResult;
 
@@ -59,10 +51,12 @@ public class LayoutMetadataResource {
 
 			MetadataUtil.retrieveMetadata(metadataConnection);
 			LayoutMetadata layoutMetadata = initMetadata(sObjectName, userId, rt);
-			XmlSaxProcessor processor = new XmlSaxProcessor();
-			processor.processMetadata(layoutMetadata);
-			processRecordTypes(layoutMetadata);
-			result = getJSON(layoutMetadata.getLayouts());
+			/*XmlSaxProcessor processor = new XmlSaxProcessor();
+			processor.processMetadata(layoutMetadata);*/
+			XmlLayoutProcessor processor = new XmlLayoutProcessor(layoutMetadata, connection);
+			//processRecordTypes(layoutMetadata);
+			
+			result = processor.process();
 		} catch (Exception e) {
 			result = e.getCause().getMessage();
 		}
@@ -86,7 +80,7 @@ public class LayoutMetadataResource {
 		return layoutMetadata;
 	}
 
-	private String processRecordTypes(LayoutMetadata layoutResp) throws ConnectionException {
+	/*private String processRecordTypes(LayoutMetadata layoutResp) throws ConnectionException {
 		ArrayList<LayoutItem> layouts = layoutResp.getLayouts();
 
 		ArrayList<String> rtNames = new ArrayList<>();
@@ -101,14 +95,14 @@ public class LayoutMetadataResource {
 		String sObjects = String.join("','", layoutResp.getProcessedObjects());
 		String query = "SELECT Id, DeveloperName, SobjectType FROM RecordType WHERE DeveloperName IN ('" + recordTypes + "') AND SobjectType IN ('" + sObjects + "')";
 		QueryResult queryResults = connection.query(query);
-		SObject[] profile = queryResults.getRecords();
-
+		SObject[] foundSObjects = queryResults.getRecords();
+		
 		HashMap<String, String> layoutToRt = new HashMap<>();
-
-		for (int i = 0; i < profile.length; i++) {
-			RecordType recordType = (RecordType) profile[i];
-
-			String key = recordType.getSobjectType() + recordType.getDeveloperName();
+		
+		for (int i = 0; i < foundSObjects.length; i++) {
+			SObject recordType = foundSObjects[i];
+			
+			String key = (String)recordType.getField("SobjectType") + (String)recordType.getField("DeveloperName");
 			String value = recordType.getId();
 			layoutToRt.put(key, value);
 		}
@@ -120,9 +114,9 @@ public class LayoutMetadataResource {
 		}
 
 		return "";
-	}
+	}*/
 
-	private String getJSON(ArrayList<LayoutItem> layouts) {
+	/*private String getJSON(ArrayList<LayoutItem> layouts) {
 		String jsonString = "";
 		if (layouts == null || layouts.isEmpty())
 			return jsonString;
@@ -134,14 +128,17 @@ public class LayoutMetadataResource {
 		}
 
 		return jsonString;
-	}
+	}*/
 
 	private String getUserProfile(String userId) throws ConnectionException {
+		String profileName = "";
+		
 		QueryResult queryResults = connection.query("SELECT Id, ProfileId, Profile.Name FROM User WHERE Id = '" + userId + "'");
-		User user = (User) queryResults.getRecords()[0];
-		Profile profile = user.getProfile();
-
-		String profileName = profile.getName();
+		SObject[] users = queryResults.getRecords();
+		if (users.length != 0) {
+			SObject user = users[0];
+			profileName = (String) user.getField("Name");
+		}
 
 		if (Consts.MISMATCH_PROFILE_NAMES.containsKey(profileName)) {
 			profileName = Consts.MISMATCH_PROFILE_NAMES.get(profileName);

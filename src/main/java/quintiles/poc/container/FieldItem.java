@@ -1,5 +1,6 @@
 package quintiles.poc.container;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class FieldItem {
@@ -10,7 +11,9 @@ public class FieldItem {
 	private String label;
 	private boolean required = false;
 	private boolean readonly = false;
+	private transient boolean visible = true;
 	private String relatedObject;
+	private ArrayList<OptionItem> options = null;
 	
 	public FieldItem() {
 	}
@@ -60,7 +63,24 @@ public class FieldItem {
 	public void setReadonly(boolean readonly) {
 		this.readonly = readonly;
 	}
-	
+	public boolean isVisible() {
+		return visible;
+	}
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	public ArrayList<OptionItem> getOptions() {
+		return options;
+	}
+	public void setOptions(ArrayList<OptionItem> options) {
+		this.options = options;
+	}
+	public void setOption(OptionItem option) {
+		if (options == null) {
+			options = new ArrayList<>();
+		}
+		this.options.add(option);
+	}
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o)
