@@ -88,7 +88,7 @@
 		</dependency>
 		<dependency>
 			<groupId>lib</groupId>
-			<artifactId>sfdcStub</artifactId>
+			<artifactId>partnerSfdcStub</artifactId>
 			<version>1.0</version>
 		</dependency>
     </dependencies>
