@@ -17,13 +17,9 @@ public class ConnectionUtil {
 		config.setUsername(Consts.USERNAME);
 		config.setPassword(Consts.PASSWORD);
 		config.setServiceEndpoint(loginUrl);
-		//config.setManualLogin(true);
-		PartnerConnection connection = new PartnerConnection(config);
-		/*ConnectorConfig config = new ConnectorConfig();
-		config.setUsername(ConstsPOC.USERNAME);
-		config.setPassword(ConstsPOC.PASSWORD);
 		
-		EnterpriseConnection connection = Connector.newConnection(config);*/
+		PartnerConnection connection = new PartnerConnection(config);
+		
 		return connection;
 	}
 	
@@ -33,6 +29,7 @@ public class ConnectionUtil {
 		config.setSessionId(loginResult.getSessionId());
 		
 		MetadataConnection connection = new MetadataConnection(config);
+		
 		return connection;
 	}
 }

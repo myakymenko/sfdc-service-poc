@@ -21,7 +21,7 @@ import quintiles.poc.container.SObjectItem;
 import quintiles.poc.heroku.Consts;
 
 public class XmlSObjectHandler implements IHandler {
-	
+
 	private IInputStreamRetriever retriever;
 	private IHandler handler;
 	private IMetadata metadata;
@@ -30,7 +30,7 @@ public class XmlSObjectHandler implements IHandler {
 		this.retriever = retriever;
 		this.metadata = metadata;
 	}
-	
+
 	public XmlSObjectHandler(IHandler handler) {
 		this.handler = handler;
 		this.metadata = handler.getMetadata();
@@ -41,6 +41,7 @@ public class XmlSObjectHandler implements IHandler {
 	public IMetadata getMetadata() {
 		return metadata;
 	}
+
 	@Override
 	public IInputStreamRetriever getRetriever() {
 		return retriever;
@@ -53,37 +54,35 @@ public class XmlSObjectHandler implements IHandler {
 		}
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 		SAXParser parser = parserFactory.newSAXParser();
-		
+
 		LayoutMetadata layoutMetadata = (LayoutMetadata) metadata;
 		for (String sObjectName : layoutMetadata.getProcessedObjects()) {
 			SaxSObjectHandler handler = new SaxSObjectHandler(layoutMetadata, sObjectName);
-			
+
 			String metadataFileName = sObjectName + Consts.METADATA_OBJECT_EXT;
-			
+
 			retriever.setSourceItem(metadataFileName);
 			InputStream foundSObject = retriever.getInputStream();
 			parser.parse(foundSObject, handler);
 		}
-		
-		System.out.println("Finish sobject handler");
 	}
-	
+
 	private class SaxSObjectHandler extends DefaultHandler {
+		
 		public static final String OBJ_TAG_FIELDS = "fields";
 		public static final String OBJ_TAG_FULLNAME = "fullName";
 		public static final String OBJ_TAG_LABEL = "label";
 		public static final String OBJ_TAG_REFERENCE = "referenceTo";
 		public static final String OBJ_TAG_OPTIONS = "valueSet";
 		public static final String OBJ_TAG_OPTION_VALUE = "value";
-
-		public final ArrayList<String> SKIP_TAGS = new ArrayList<String>(){
+		public final ArrayList<String> SKIP_TAGS = new ArrayList<String>() {
 			{
 				add("listViews");
 				add("recordTypes");
 				add("businessProcesses");
 			}
 		};
-		
+
 		private ArrayList<FieldItem> fieldItemList = null;
 		private FieldItem fieldItem = null;
 		private ArrayList<OptionItem> optionItems = null;
@@ -99,19 +98,14 @@ public class XmlSObjectHandler implements IHandler {
 		}
 
 		@Override
-		// Triggered when the start of tag is found.
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-
 			switch (qName) {
-			// Create a new FieldItem object when the start tag is found
 			case OBJ_TAG_FIELDS:
 				fieldItem = new FieldItem();
 				break;
 			case OBJ_TAG_OPTIONS:
 				if (fieldItem != null) {
 					isOptionsSet = true;
-					
-					
 				}
 				break;
 			case OBJ_TAG_OPTION_VALUE:
@@ -126,11 +120,9 @@ public class XmlSObjectHandler implements IHandler {
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			switch (qName) {
-			// Add the FieldItem to list once end tag is found
 			case OBJ_TAG_FIELDS:
 				fieldItemList.add(fieldItem);
 				break;
-			// For all other end tags the FieldItem has to be updated.
 			case OBJ_TAG_FULLNAME:
 				if (!ignoreTags) {
 					if (isOptionsSet) {
@@ -167,5 +159,4 @@ public class XmlSObjectHandler implements IHandler {
 			content = String.copyValueOf(ch, start, length).trim();
 		}
 	}
-	
 }

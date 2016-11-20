@@ -7,9 +7,9 @@ import quintiles.poc.heroku.Consts;
 import quintiles.poc.heroku.Utils;
 
 public class FilesystemInputStreamRetriever implements IInputStreamRetriever {
-	
+
 	private String fileName;
-	
+
 	public FilesystemInputStreamRetriever() {
 	}
 
@@ -22,6 +22,5 @@ public class FilesystemInputStreamRetriever implements IInputStreamRetriever {
 	public InputStream getInputStream() throws Exception {
 		return Utils.getProcessedFileInputStream(fileName, Consts.WORKING_DIR);
 	}
-
 
 }

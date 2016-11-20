@@ -19,17 +19,17 @@ public class FieldOptionsProcessor implements IHandler {
 	private IHandler handler;
 	private IMetadata metadata;
 	private IInputStreamRetriever retriever;
-	
+
 	public FieldOptionsProcessor(IMetadata metadata) throws ParserConfigurationException, SAXException {
 		this.metadata = metadata;
 	}
-	
+
 	public FieldOptionsProcessor(IHandler handler) {
 		this.handler = handler;
 		this.metadata = handler.getMetadata();
 		this.retriever = handler.getRetriever();
 	}
-	
+
 	@Override
 	public IMetadata getMetadata() {
 		return metadata;
@@ -46,7 +46,7 @@ public class FieldOptionsProcessor implements IHandler {
 			handler.handle();
 		}
 		LayoutMetadata layoutMetadata = (LayoutMetadata) metadata;
-		
+
 		for (SObjectItem sobject : layoutMetadata.getSObjects()) {
 			for (FieldItem field : sobject.getFields()) {
 				ArrayList<OptionItem> options = field.getOptions();
@@ -55,11 +55,9 @@ public class FieldOptionsProcessor implements IHandler {
 				}
 			}
 		}
-		
-		System.out.println("Finish field options");
 	}
-	
-	//TODO Label value will be get from external system. 
+
+	// TODO Label value will be get from external system.
 	private void processOptions(ArrayList<OptionItem> options) {
 		for (OptionItem optionItem : options) {
 			optionItem.setLabel(optionItem.getCode());

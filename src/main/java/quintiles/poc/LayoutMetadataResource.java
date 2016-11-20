@@ -42,8 +42,8 @@ public class LayoutMetadataResource {
 	@Path("sobjectLayouts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getLayouts(@QueryParam("sObjectName") String sObjectName, @QueryParam("userId") String userId, @QueryParam("rt") String rt) {
-
 		String result = "";
+		
 		try {
 			connection = ConnectionUtil.getSOAPConnection(Consts.URL);
 			loginResult = connection.login(Consts.USERNAME, Consts.PASSWORD);
@@ -51,10 +51,7 @@ public class LayoutMetadataResource {
 
 			MetadataUtil.retrieveMetadata(metadataConnection);
 			LayoutMetadata layoutMetadata = initMetadata(sObjectName, userId, rt);
-			/*XmlSaxProcessor processor = new XmlSaxProcessor();
-			processor.processMetadata(layoutMetadata);*/
 			XmlLayoutProcessor processor = new XmlLayoutProcessor(layoutMetadata, connection);
-			//processRecordTypes(layoutMetadata);
 			
 			result = processor.process();
 		} catch (Exception e) {
@@ -65,73 +62,22 @@ public class LayoutMetadataResource {
 	}
 
 	private LayoutMetadata initMetadata(String sObjectName, String userId, String rt) throws Exception {
-		System.out.println("Start init metadata");
 		LayoutMetadata layoutMetadata = null;
+		
 		String profileName = getUserProfile(userId);
-		System.out.println("UserProfile found " + profileName);
+		
 		if (!Utils.isBlankString(profileName)) {
 			if (Utils.isBlankString(sObjectName)) {
 				layoutMetadata = new LayoutMetadata(profileName, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE);
 			} else {
 				layoutMetadata = new LayoutMetadata(profileName, sObjectName, rt);
 			}
-			System.out.println("Layout metadata initialized");
 		} else {
 			throw new Exception(Consts.MSG_URI_EXCEPTION);
 		}
 
 		return layoutMetadata;
 	}
-
-	/*private String processRecordTypes(LayoutMetadata layoutResp) throws ConnectionException {
-		ArrayList<LayoutItem> layouts = layoutResp.getLayouts();
-
-		ArrayList<String> rtNames = new ArrayList<>();
-		for (LayoutItem layoutItem : layouts) {
-			String rtName = layoutItem.getSubtype();
-			if (!Utils.isBlankString(rtName)) {
-				rtNames.add(rtName);
-			}
-		}
-
-		String recordTypes = String.join("','", rtNames);
-		String sObjects = String.join("','", layoutResp.getProcessedObjects());
-		String query = "SELECT Id, DeveloperName, SobjectType FROM RecordType WHERE DeveloperName IN ('" + recordTypes + "') AND SobjectType IN ('" + sObjects + "')";
-		QueryResult queryResults = connection.query(query);
-		SObject[] foundSObjects = queryResults.getRecords();
-		
-		HashMap<String, String> layoutToRt = new HashMap<>();
-		
-		for (int i = 0; i < foundSObjects.length; i++) {
-			SObject recordType = foundSObjects[i];
-			
-			String key = (String)recordType.getField("SobjectType") + (String)recordType.getField("DeveloperName");
-			String value = recordType.getId();
-			layoutToRt.put(key, value);
-		}
-
-		for (LayoutItem layoutItem : layouts) {
-			String key = layoutItem.getType() + layoutItem.getSubtype();
-
-			layoutItem.setRecordTypeId(layoutToRt.get(key));
-		}
-
-		return "";
-	}*/
-
-	/*private String getJSON(ArrayList<LayoutItem> layouts) {
-		String jsonString = "";
-		if (layouts == null || layouts.isEmpty())
-			return jsonString;
-
-		if (layouts.size() > 1) {
-			jsonString = new Gson().toJson(layouts);
-		} else {
-			jsonString = new Gson().toJson(layouts.get(0));
-		}
-
-		return jsonString;
-	}*/
 
 	private String getUserProfile(String userId) throws ConnectionException {
 		String profileName = "";

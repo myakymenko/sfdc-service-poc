@@ -22,7 +22,7 @@ public class XmlLayoutProcessor implements IRequestProcessor {
 
 	private IMetadata metadata;
 	private PartnerConnection connection;
-	
+
 	public XmlLayoutProcessor(IMetadata metadata, PartnerConnection connection) {
 		this.metadata = metadata;
 		this.connection = connection;
@@ -31,21 +31,20 @@ public class XmlLayoutProcessor implements IRequestProcessor {
 	@Override
 	public String process() throws Exception {
 		FilesystemInputStreamRetriever retriever = new FilesystemInputStreamRetriever();
-		
+
 		IHandler handler = new XmlSObjectHandler(metadata, retriever);
 		handler = new FieldOptionsProcessor(handler);
 		handler = new XmlProfileHandler(handler);
 		handler = new XmlLayoutHandler(handler);
 		handler = new FieldAccessibilityHandler(handler);
 		handler = new RecordTypeIdHandler(handler, connection);
-		System.out.println("Finish handler initialzation");
 		handler.handle();
-		
+
 		LayoutMetadata layoutMetadata = (LayoutMetadata) metadata;
-		
+
 		return getJSON(layoutMetadata.getProcessedLayouts());
 	}
-	
+
 	private String getJSON(ArrayList<LayoutItem> layouts) {
 		String jsonString = "";
 		if (layouts == null || layouts.isEmpty())
@@ -59,5 +58,4 @@ public class XmlLayoutProcessor implements IRequestProcessor {
 
 		return jsonString;
 	}
-
 }

@@ -23,7 +23,6 @@ public class MetadataUtil {
             throw new Exception(result.getErrorStatusCode() + " msg: " +
                     result.getErrorMessage());
         } else if (result.getStatus() == RetrieveStatus.Succeeded) {  
-	        // Print out any warning messages
 	        StringBuilder stringBuilder = new StringBuilder();
 	        if (result.getMessages() != null) {
 	            for (RetrieveMessage rm : result.getMessages()) {
@@ -41,7 +40,6 @@ public class MetadataUtil {
 	        try {
 	            os.write(result.getZipFile());
 	            System.out.println("Starting unzip");
-	            //UtilPOC.unzipFunction(ConstsPOC.WORKING_DIR, ConstsPOC.ZIP_FILE);
 	            Utils.unzipFunction(Consts.WORKING_DIR, Consts.ZIP_FILE);
 	            System.out.println("Finish unzip");
 	        } finally {
@@ -104,6 +102,7 @@ public class MetadataUtil {
 		PackageTypeMembers[] packageTypesArray = new PackageTypeMembers[pkgMembers.size()];
 		packageManifest.setTypes(pkgMembers.toArray(packageTypesArray));
 		packageManifest.setVersion(Consts.API_VERSION + "");
+		
 		return packageManifest;
 	}
 }
