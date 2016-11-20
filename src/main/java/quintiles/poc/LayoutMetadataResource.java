@@ -65,14 +65,17 @@ public class LayoutMetadataResource {
 	}
 
 	private LayoutMetadata initMetadata(String sObjectName, String userId, String rt) throws Exception {
+		System.out.println("Start init metadata");
 		LayoutMetadata layoutMetadata = null;
 		String profileName = getUserProfile(userId);
+		System.out.println("UserProfile found");
 		if (!Utils.isBlankString(profileName)) {
 			if (Utils.isBlankString(sObjectName)) {
 				layoutMetadata = new LayoutMetadata(profileName, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE);
 			} else {
 				layoutMetadata = new LayoutMetadata(profileName, sObjectName, rt);
 			}
+			System.out.println("Layout metadata initialized");
 		} else {
 			throw new Exception(Consts.MSG_URI_EXCEPTION);
 		}
