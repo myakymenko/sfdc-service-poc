@@ -38,6 +38,7 @@ public class XmlLayoutProcessor implements IRequestProcessor {
 		handler = new XmlLayoutHandler(handler);
 		handler = new FieldAccessibilityHandler(handler);
 		handler = new RecordTypeIdHandler(handler, connection);
+		System.out.println("Finish handler initialzation");
 		handler.handle();
 		
 		LayoutMetadata layoutMetadata = (LayoutMetadata) metadata;

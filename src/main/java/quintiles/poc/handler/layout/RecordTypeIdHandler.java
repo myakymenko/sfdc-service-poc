@@ -96,7 +96,7 @@ public class RecordTypeIdHandler implements IHandler {
 
 			layoutItem.setRecordTypeId(layoutToRt.get(key));
 		}
-
+		System.out.println("Finish record type id");
 	}
 
 }

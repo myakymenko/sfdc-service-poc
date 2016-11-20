@@ -64,7 +64,7 @@ public class XmlLayoutHandler implements IHandler {
 			InputStream foundSObject = retriever.getInputStream();
 			parser.parse(foundSObject, handler);
 		}
-		
+		System.out.println("Finish layout handler");
 	}
 	
 	private class SaxLayoutHandler extends DefaultHandler {

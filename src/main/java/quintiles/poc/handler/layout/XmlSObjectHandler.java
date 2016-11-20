@@ -64,6 +64,8 @@ public class XmlSObjectHandler implements IHandler {
 			InputStream foundSObject = retriever.getInputStream();
 			parser.parse(foundSObject, handler);
 		}
+		
+		System.out.println("Finish sobject handler");
 	}
 	
 	private class SaxSObjectHandler extends DefaultHandler {

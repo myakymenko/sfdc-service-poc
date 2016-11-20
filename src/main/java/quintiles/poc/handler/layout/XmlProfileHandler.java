@@ -63,6 +63,8 @@ public class XmlProfileHandler implements IHandler {
 		retriever.setSourceItem(metadataFileName);
 		InputStream foundSObject = retriever.getInputStream();
 		parser.parse(foundSObject, handler);
+		
+		System.out.println("Finish profile handler");
 	}
 
 	private class SaxProfileHandler extends DefaultHandler {

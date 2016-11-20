@@ -90,6 +90,7 @@ public class FieldAccessibilityHandler implements IHandler {
 			}
 			
 			layoutMetadata.setProcessedLayout(processedLayout);
+			System.out.println("Finish field accesibility");
 		}
 
 	}

@@ -55,6 +55,8 @@ public class FieldOptionsProcessor implements IHandler {
 				}
 			}
 		}
+		
+		System.out.println("Finish field options");
 	}
 	
 	//TODO Label value will be get from external system. 
