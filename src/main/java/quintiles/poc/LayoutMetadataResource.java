@@ -68,7 +68,7 @@ public class LayoutMetadataResource {
 		System.out.println("Start init metadata");
 		LayoutMetadata layoutMetadata = null;
 		String profileName = getUserProfile(userId);
-		System.out.println("UserProfile found");
+		System.out.println("UserProfile found " + profileName);
 		if (!Utils.isBlankString(profileName)) {
 			if (Utils.isBlankString(sObjectName)) {
 				layoutMetadata = new LayoutMetadata(profileName, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE);
@@ -136,11 +136,11 @@ public class LayoutMetadataResource {
 	private String getUserProfile(String userId) throws ConnectionException {
 		String profileName = "";
 		
-		QueryResult queryResults = connection.query("SELECT Id, ProfileId, Profile.Name FROM User WHERE Id = '" + userId + "'");
+		QueryResult queryResults = connection.query("SELECT Profile.Name profName FROM User WHERE Id = '" + userId + "' GROUP BY Profile.Name");
 		SObject[] users = queryResults.getRecords();
 		if (users.length != 0) {
 			SObject user = users[0];
-			profileName = (String) user.getField("Name");
+			profileName = (String) user.getField("profName");
 		}
 
 		if (Consts.MISMATCH_PROFILE_NAMES.containsKey(profileName)) {
