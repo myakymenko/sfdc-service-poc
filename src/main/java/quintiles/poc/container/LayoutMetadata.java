@@ -7,8 +7,8 @@ import quintiles.poc.api.IMetadata;
 
 public class LayoutMetadata implements IMetadata {
 
-	private transient String profileName = null;
-	private transient String recordType = null;
+	private String profileName = null;
+	private String recordType = null;
 	private ArrayList<String> processedObjects = new ArrayList<>();
 	private ProfileItem profile = null;
 	private ArrayList<SObjectItem> sObjects = new ArrayList<>();

@@ -23,20 +23,6 @@ import quintiles.poc.heroku.XmlLayoutProcessor;
 @Path("layouts")
 public class LayoutMetadataResource {
 	private PartnerConnection connection;
-	private MetadataConnection metadataConnection;
-	private LoginResult loginResult;
-
-	/**
-	 * Method handling HTTP GET requests. The returned object will be sent to
-	 * the client as "text/plain" media type.
-	 *
-	 * @return String that will be returned as a text/plain response.
-	 */
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getIt() {
-		return "Web app is alieve";
-	}
 
 	@GET
 	@Path("sobjectLayouts")
@@ -46,8 +32,8 @@ public class LayoutMetadataResource {
 		
 		try {
 			connection = ConnectionUtil.getSOAPConnection(Consts.URL);
-			loginResult = connection.login(Consts.USERNAME, Consts.PASSWORD);
-			metadataConnection = ConnectionUtil.getSOAPMetadataConnection(loginResult);
+			LoginResult loginResult = connection.login(Consts.USERNAME, Consts.PASSWORD);//??????
+			MetadataConnection metadataConnection = ConnectionUtil.getSOAPMetadataConnection(loginResult);
 
 			MetadataUtil.retrieveMetadata(metadataConnection);
 			LayoutMetadata layoutMetadata = initMetadata(sObjectName, userId, rt);
@@ -67,11 +53,9 @@ public class LayoutMetadataResource {
 		String profileName = getUserProfile(userId);
 		
 		if (!Utils.isBlankString(profileName)) {
-			if (Utils.isBlankString(sObjectName)) {
-				layoutMetadata = new LayoutMetadata(profileName, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE);
-			} else {
-				layoutMetadata = new LayoutMetadata(profileName, sObjectName, rt);
-			}
+			layoutMetadata = Utils.isBlankString(sObjectName)?
+					new LayoutMetadata(profileName, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE):
+					new LayoutMetadata(profileName, sObjectName, rt);
 		} else {
 			throw new Exception(Consts.MSG_URI_EXCEPTION);
 		}
@@ -79,6 +63,7 @@ public class LayoutMetadataResource {
 		return layoutMetadata;
 	}
 
+	//separate service
 	private String getUserProfile(String userId) throws ConnectionException {
 		String profileName = "";
 		

@@ -18,23 +18,25 @@ public class MetadataUtil {
 	
 	public static void retrieveMetadata(MetadataConnection metadataConnection) throws Exception {
         RetrieveResult result = sendMetadataRetrieveRequest(metadataConnection);
-
         if (result.getStatus() == RetrieveStatus.Failed) {
             throw new Exception(result.getErrorStatusCode() + " msg: " +
                     result.getErrorMessage());
         } else if (result.getStatus() == RetrieveStatus.Succeeded) {  
 	        StringBuilder stringBuilder = new StringBuilder();
-	        if (result.getMessages() != null) {
-	            for (RetrieveMessage rm : result.getMessages()) {
-	                stringBuilder.append(rm.getFileName() + " - " + rm.getProblem() + "\n");
-	            }
-	        }
-	        if (stringBuilder.length() > 0) {
-	            System.out.println("Retrieve warnings:\n" + stringBuilder);
-	        }
+		        //METOD log warnings
+	        	if (result.getMessages() != null) {
+		            for (RetrieveMessage rm : result.getMessages()) {
+		                stringBuilder.append(rm.getFileName() + " - " + rm.getProblem() + "\n");
+		            }
+		        }
+		        if (stringBuilder.length() > 0) {
+		            System.out.println("Retrieve warnings:\n" + stringBuilder);
+		        }
 	
 	        System.out.println("Writing results to zip file");
-	        File resultsFile = new File(Consts.ZIP_FILE);
+	        
+	        //TODO move to background processing and to separate method
+	        File resultsFile = new File(Consts.ZIP_FILE);//??????
 	        FileOutputStream os = new FileOutputStream(resultsFile);
 	
 	        try {
@@ -52,8 +54,8 @@ public class MetadataUtil {
 		RetrieveRequest retrieveRequest = new RetrieveRequest();
         // The version in package.xml overrides the version in RetrieveRequest
         retrieveRequest.setApiVersion(Consts.API_VERSION);
-        setUnpackaged(retrieveRequest);
-        
+        setPackageRequest(retrieveRequest);
+        //TODO asynch make sense only in the background processing
 		AsyncResult asyncResult = metadataConnection.retrieve(retrieveRequest);
 		// Wait for the retrieve to complete
 		int poll = 0;
@@ -76,7 +78,7 @@ public class MetadataUtil {
 		return result;
 	}
 
-	private static void setUnpackaged(RetrieveRequest request) throws Exception {
+	private static void setPackageRequest(RetrieveRequest request) throws Exception {
 		com.sforce.soap.metadata.Package p = getRetrieveManifest();
 		request.setUnpackaged(p);
 	}
@@ -89,7 +91,7 @@ public class MetadataUtil {
 		retrieveConfig.put(Consts.METADATA_CUSTOM_OBJECT, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE);
 		
 		List<PackageTypeMembers> pkgMembers = new ArrayList<>();
-		
+		//jdk 8?
 		for (String key : retrieveConfig.keySet()) {
 			PackageTypeMembers packageTypes = new PackageTypeMembers();
 			packageTypes.setName(key);
@@ -101,7 +103,7 @@ public class MetadataUtil {
 		packageManifest = new com.sforce.soap.metadata.Package();
 		PackageTypeMembers[] packageTypesArray = new PackageTypeMembers[pkgMembers.size()];
 		packageManifest.setTypes(pkgMembers.toArray(packageTypesArray));
-		packageManifest.setVersion(Consts.API_VERSION + "");
+		packageManifest.setVersion(String.valueOf(Consts.API_VERSION));
 		
 		return packageManifest;
 	}

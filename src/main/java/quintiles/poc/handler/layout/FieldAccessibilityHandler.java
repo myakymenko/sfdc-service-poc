@@ -13,6 +13,7 @@ import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.container.ProfileItem;
 import quintiles.poc.container.SObjectItem;
 import quintiles.poc.container.SectionItem;
+import quintiles.poc.heroku.Utils;
 
 public class FieldAccessibilityHandler implements IHandler {
 
@@ -73,7 +74,9 @@ public class FieldAccessibilityHandler implements IHandler {
 						processedFieldItem.setRelatedObject(sectionField.getRelatedObject());
 
 						if (metadataField != null) {
-							processedFieldItem.setLabel(metadataField.getLabel());
+							String labelValue = Utils.isBlankString(metadataField.getLabel()) ? metadataField.getName() : metadataField.getLabel();
+							
+							processedFieldItem.setLabel(labelValue);
 							processedFieldItem.setOptions(metadataField.getOptions());
 							processedFieldItem.setRelatedObject(metadataField.getRelatedObject());
 						}
