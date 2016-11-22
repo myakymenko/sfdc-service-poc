@@ -81,6 +81,7 @@ public class XmlSObjectHandler implements IHandler {
 				add("listViews");
 				add("recordTypes");
 				add("businessProcesses");
+				add("actionOverrides");
 			}
 		};
 
