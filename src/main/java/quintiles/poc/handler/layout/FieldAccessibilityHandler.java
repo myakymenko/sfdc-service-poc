@@ -79,6 +79,7 @@ public class FieldAccessibilityHandler implements IHandler {
 							processedFieldItem.setLabel(labelValue);
 							processedFieldItem.setOptions(metadataField.getOptions());
 							processedFieldItem.setRelatedObject(metadataField.getRelatedObject());
+							processedFieldItem.setType(metadataField.getType());
 						}
 
 						boolean readOnly = profileField != null && profileField.isReadonly() ? profileField.isReadonly() : sectionField.isReadonly();

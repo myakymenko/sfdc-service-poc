@@ -1,4 +1,4 @@
-package quintiles.poc.heroku;
+package quintiles.poc.service;
 
 import com.sforce.soap.metadata.MetadataConnection;
 import com.sforce.soap.partner.LoginResult;
@@ -6,19 +6,9 @@ import com.sforce.soap.partner.PartnerConnection;
 import com.sforce.ws.ConnectionException;
 import com.sforce.ws.ConnectorConfig;
 
-import quintiles.poc.util.Settings;
-
-/**
- * Login utility.
- */
-public class ConnectionUtil {
-
-	public static PartnerConnection getSOAPConnection(String loginUrl) throws ConnectionException {
-		Settings settings = Settings.getInstance();
-		
-		String userName = settings.get(Consts.ENV_SFDC_USER);
-		String password =  settings.get(Consts.ENV_SFDC_PASSWORD);
-		
+public class ConnectionService {
+	
+	public PartnerConnection getSOAPConnection(String loginUrl, String userName, String password) throws ConnectionException {
 		ConnectorConfig config = new ConnectorConfig();
 		config.setAuthEndpoint(loginUrl);
 		config.setUsername(userName);
@@ -30,7 +20,7 @@ public class ConnectionUtil {
 		return connection;
 	}
 	
-	public static MetadataConnection getSOAPMetadataConnection(LoginResult loginResult) throws ConnectionException {
+	public MetadataConnection getSOAPMetadataConnection(LoginResult loginResult) throws ConnectionException {
 		ConnectorConfig config = new ConnectorConfig();
 		config.setServiceEndpoint(loginResult.getMetadataServerUrl());
 		config.setSessionId(loginResult.getSessionId());

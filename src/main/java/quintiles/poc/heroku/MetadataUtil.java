@@ -14,6 +14,8 @@ import com.sforce.soap.metadata.RetrieveRequest;
 import com.sforce.soap.metadata.RetrieveResult;
 import com.sforce.soap.metadata.RetrieveStatus;
 
+import quintiles.poc.util.Settings;
+
 public class MetadataUtil {
 	
 	public static void retrieveMetadata(MetadataConnection metadataConnection) throws Exception {
@@ -53,7 +55,8 @@ public class MetadataUtil {
 	private static RetrieveResult sendMetadataRetrieveRequest(MetadataConnection metadataConnection) throws Exception {
 		RetrieveRequest retrieveRequest = new RetrieveRequest();
         // The version in package.xml overrides the version in RetrieveRequest
-        retrieveRequest.setApiVersion(Consts.API_VERSION);
+		Double apiVersion = Double.valueOf(Settings.getInstance().get(Consts.ENV_API_VERSION));
+        retrieveRequest.setApiVersion(apiVersion);
         setPackageRequest(retrieveRequest);
         //TODO asynch make sense only in the background processing
 		AsyncResult asyncResult = metadataConnection.retrieve(retrieveRequest);
@@ -85,10 +88,18 @@ public class MetadataUtil {
 	
 	private static com.sforce.soap.metadata.Package getRetrieveManifest() {
 		com.sforce.soap.metadata.Package packageManifest = null;
+		
+		Settings settings = Settings.getInstance();
+		
+		String apiVersion =  settings.get(Consts.ENV_API_VERSION);
+		String[] layouts = settings.get(Consts.ENV_LAYOUTS).split(Consts.ENV_VAL_SEPARATOR);
+		String[] profiles =  settings.get(Consts.ENV_PROFILES).split(Consts.ENV_VAL_SEPARATOR);
+		String[] sobjects =  settings.get(Consts.ENV_SOBJECTS).split(Consts.ENV_VAL_SEPARATOR);
+		
 		HashMap<String, String[]> retrieveConfig = new HashMap<String, String[]>();
-		retrieveConfig.put(Consts.METADATA_LAYOUT, Consts.METADATA_LAYOUT_RETRIEVE);
-		retrieveConfig.put(Consts.METADATA_PROFILE, Consts.METADATA_PROFILE_RETRIEVE);
-		retrieveConfig.put(Consts.METADATA_CUSTOM_OBJECT, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE);
+		retrieveConfig.put(Consts.METADATA_LAYOUT, layouts);
+		retrieveConfig.put(Consts.METADATA_PROFILE, profiles);
+		retrieveConfig.put(Consts.METADATA_CUSTOM_OBJECT, sobjects);
 		
 		List<PackageTypeMembers> pkgMembers = new ArrayList<>();
 		//jdk 8?
@@ -103,7 +114,7 @@ public class MetadataUtil {
 		packageManifest = new com.sforce.soap.metadata.Package();
 		PackageTypeMembers[] packageTypesArray = new PackageTypeMembers[pkgMembers.size()];
 		packageManifest.setTypes(pkgMembers.toArray(packageTypesArray));
-		packageManifest.setVersion(String.valueOf(Consts.API_VERSION));
+		packageManifest.setVersion(apiVersion);
 		
 		return packageManifest;
 	}

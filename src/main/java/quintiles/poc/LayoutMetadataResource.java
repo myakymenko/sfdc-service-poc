@@ -14,11 +14,12 @@ import com.sforce.soap.partner.sobject.SObject;
 import com.sforce.ws.ConnectionException;
 
 import quintiles.poc.container.LayoutMetadata;
-import quintiles.poc.heroku.ConnectionUtil;
 import quintiles.poc.heroku.Consts;
 import quintiles.poc.heroku.MetadataUtil;
 import quintiles.poc.heroku.Utils;
 import quintiles.poc.heroku.XmlLayoutProcessor;
+import quintiles.poc.service.ConnectionService;
+import quintiles.poc.util.Settings;
 
 @Path("layouts")
 public class LayoutMetadataResource {
@@ -31,9 +32,18 @@ public class LayoutMetadataResource {
 		String result = "";
 		
 		try {
-			connection = ConnectionUtil.getSOAPConnection(Consts.URL);
-			LoginResult loginResult = connection.login(Consts.USERNAME, Consts.PASSWORD);//??????
-			MetadataConnection metadataConnection = ConnectionUtil.getSOAPMetadataConnection(loginResult);
+			Settings settings = Settings.getInstance();
+			
+			String userName = settings.get(Consts.ENV_SFDC_USER);
+			String password =  settings.get(Consts.ENV_SFDC_PASSWORD);
+			String soapUrl = settings.get(Consts.ENV_SOAP_URL);
+			ConnectionService connectionService = new ConnectionService();
+			
+			connection = connectionService.getSOAPConnection(soapUrl, userName, password);
+			
+			LoginResult loginResult = connection.login(userName, password);
+			
+			MetadataConnection metadataConnection = connectionService.getSOAPMetadataConnection(loginResult);
 
 			MetadataUtil.retrieveMetadata(metadataConnection);
 			LayoutMetadata layoutMetadata = initMetadata(sObjectName, userId, rt);
@@ -54,7 +64,7 @@ public class LayoutMetadataResource {
 		
 		if (!Utils.isBlankString(profileName)) {
 			layoutMetadata = Utils.isBlankString(sObjectName)?
-					new LayoutMetadata(profileName, Consts.METADATA_CUSTOM_OBJECT_RETRIEVE):
+					new LayoutMetadata(profileName, Settings.getInstance().get(Consts.ENV_SOBJECTS).split(Consts.ENV_VAL_SEPARATOR)):
 					new LayoutMetadata(profileName, sObjectName, rt);
 		} else {
 			throw new Exception(Consts.MSG_URI_EXCEPTION);

@@ -73,6 +73,7 @@ public class XmlSObjectHandler implements IHandler {
 		public static final String OBJ_TAG_FULLNAME = "fullName";
 		public static final String OBJ_TAG_LABEL = "label";
 		public static final String OBJ_TAG_REFERENCE = "referenceTo";
+		public static final String OBJ_TAG_TYPE = "type";
 		public static final String OBJ_TAG_OPTIONS = "valueSet";
 		public static final String OBJ_TAG_OPTION_VALUE = "value";
 		public final ArrayList<String> SKIP_TAGS = new ArrayList<String>() {
@@ -139,6 +140,11 @@ public class XmlSObjectHandler implements IHandler {
 			case OBJ_TAG_REFERENCE:
 				if (!ignoreTags)
 					fieldItem.setRelatedObject(content);
+				break;
+			case OBJ_TAG_TYPE:
+				if (!ignoreTags) {
+					fieldItem.setType(content);
+				}
 				break;
 			case OBJ_TAG_OPTION_VALUE:
 				if (isOptionsSet) {

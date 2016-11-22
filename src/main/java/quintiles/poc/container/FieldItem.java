@@ -13,6 +13,7 @@ public class FieldItem {
 	private boolean readonly = false;
 	private transient boolean visible = true;
 	private String relatedObject;
+	private String type;
 	private ArrayList<OptionItem> options = null;
 
 	public FieldItem() {
@@ -99,6 +100,14 @@ public class FieldItem {
 			options = new ArrayList<>();
 		}
 		this.options.add(option);
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override

@@ -3,10 +3,21 @@ package quintiles.poc.heroku;
 import java.util.HashMap;
 
 public class Consts {
-	public static final double API_VERSION = 38.0;
+	
+	public static final String ENV_API_VERSION = "SFDC_SOAP_API_VERSION";
+	public static final String ENV_SOAP_URL = "SFDC_SOAP_URL";
+	public static final String ENV_SFDC_USER = "SFDC_USERNAME";
+	public static final String ENV_SFDC_PASSWORD = "SFDC_PASSWORD";
+	public static final String ENV_PROFILES = "SFDC_PROFILES";
+	public static final String ENV_LAYOUTS = "SFDC_LAYOUTS";
+	public static final String ENV_SOBJECTS = "SFDC_SOBJECTS";
+	
+	public static final String ENV_VAL_SEPARATOR = ",";
+	
+	/*public static final double API_VERSION = 38.0;
 	public static final String URL = "https://login.salesforce.com/services/Soap/u/" + API_VERSION;//TODO heroku environment variable
 	public static final String USERNAME = "myakymenko@ims.poc";
-	public static final String PASSWORD = "max7011988oFZPKABDlsT01u8s1rWoCA0K";
+	public static final String PASSWORD = "max7011988oFZPKABDlsT01u8s1rWoCA0K";*/
 	
     // one second in milliseconds
 	public static final long ONE_SECOND_MS = 1000;
@@ -22,9 +33,9 @@ public class Consts {
 	public static final String METADATA_CUSTOM_OBJECT = "CustomObject";
 	public static final String METADATA_LAYOUT = "Layout";
 	
-	public static final String[] METADATA_PROFILE_RETRIEVE = new String[]{"*"};
+	/*public static final String[] METADATA_PROFILE_RETRIEVE = new String[]{"*"};
 	public static final String[] METADATA_LAYOUT_RETRIEVE = new String[]{"*"};
-	public static final String[] METADATA_CUSTOM_OBJECT_RETRIEVE = new String[] { "Account", "Contact" , "Case" , "Event" , "Task"}; //TODO heroku environment variable
+	public static final String[] METADATA_CUSTOM_OBJECT_RETRIEVE = new String[] { "Account", "Contact" , "Case" , "Event" , "Task"}; //TODO heroku environment variable*/
 	
 	public static final String METADATA_PROFILE_EXT = ".profile";
 	public static final String METADATA_OBJECT_EXT = ".object";
