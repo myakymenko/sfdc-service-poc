@@ -23,7 +23,7 @@ import quintiles.poc.util.Utils;
 
 public class MetadataRetrieveService {
 
-	private Logger log = LoggerFactory.getLogger(Settings.class);
+	private Logger log = LoggerFactory.getLogger(MetadataRetrieveService.class);
 
 	MetadataConnection metadataConnection;
 

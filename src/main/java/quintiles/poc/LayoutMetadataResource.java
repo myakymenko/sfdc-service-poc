@@ -28,20 +28,7 @@ import quintiles.poc.util.Utils;
 @Path("layouts")
 public class LayoutMetadataResource {
 	
-	private Logger log = LoggerFactory.getLogger(Settings.class);
-	@GET
-	@Path("reload")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String resetLayouts() {
-		String result = "Metadata has been updated successfully.";
-		try {
-			LayoutMetadataTask scheduler = LayoutMetadataTask.getInstance();
-			scheduler.runTask();
-		} catch (Exception e) {
-			result = "Error has been occured while processing metadata.\n";
-		}
-		return result;
-	}
+	private Logger log = LoggerFactory.getLogger(LayoutMetadataResource.class);
 	
 	@GET
 	@Path("sobjectLayouts")

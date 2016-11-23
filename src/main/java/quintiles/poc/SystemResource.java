@@ -8,12 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quintiles.poc.schedule.LayoutMetadataTask;
-import quintiles.poc.util.Settings;
 
 @Path("sync")
 public class SystemResource {
 	
-	private Logger log = LoggerFactory.getLogger(Settings.class);
+	private Logger log = LoggerFactory.getLogger(SystemResource.class);
 	
 	@POST
 	public Response resetLayouts() {
@@ -24,6 +23,7 @@ public class SystemResource {
 			response = Response.ok().build();
 		} catch (Exception e) {
 			response = Response.serverError().build();
+			log.error(e.getMessage());
 		}
 		return response;
 	}
