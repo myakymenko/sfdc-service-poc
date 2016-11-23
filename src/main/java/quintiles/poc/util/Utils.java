@@ -1,8 +1,7 @@
-package quintiles.poc.heroku;
+package quintiles.poc.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
@@ -42,49 +41,12 @@ public class Utils {
         }
     }
 
-    private static void createDirIfNeeded(String path) throws Exception {
+    public static void createDirIfNeeded(String path) throws Exception {
         File dir = new File(path);
         if (!dir.exists() && !dir.mkdirs()) {
             throw new Exception("Folder was not created");
         }
     }
-	
-	public static FileInputStream getProcessedFileInputStream(String fileName, String searchFileDir) throws FileNotFoundException {
-		FileInputStream result = null;
-		File processedFile = null;
-		
-		if (searchFileDir != null) {
-			File serchDir = new File(searchFileDir);
-			
-			processedFile = searchFile(fileName, serchDir);
-		} else {
-			processedFile = new File(fileName);
-		}
-		
-		result = new FileInputStream(processedFile);
-		
-		return result;
-	}
-	
-	public static File searchFile(String fileName, File path) {
-		File result = null;
-		File[] list = path.listFiles();
-		if (list != null) {
-			for (File file : list) {
-				if (file.isDirectory()) {
-					result = searchFile(fileName, file);
-				} else {
-					if (fileName.equalsIgnoreCase(file.getName())) {
-						result = file;
-					}
-				}
-				if (result != null) {
-					return result;
-				}
-			}
-		}
-		return result;
-	}
 	
 	public static boolean isBlankString(String str) {
 		return str == null || str.trim().equals("");

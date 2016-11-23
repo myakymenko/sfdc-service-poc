@@ -3,7 +3,6 @@ package quintiles.poc.handler.layout;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -11,52 +10,32 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import quintiles.poc.api.IHandler;
 import quintiles.poc.api.IInputStreamRetriever;
 import quintiles.poc.api.IMetadata;
 import quintiles.poc.container.FieldItem;
 import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.container.OptionItem;
 import quintiles.poc.container.SObjectItem;
-import quintiles.poc.heroku.Consts;
+import quintiles.poc.handler.AbstractHandler;
+import quintiles.poc.util.Consts;
 
-public class XmlSObjectHandler implements IHandler {
+public class XmlSObjectHandler extends AbstractHandler {
 
-	private IInputStreamRetriever retriever;
-	private IHandler handler;
-	private IMetadata metadata;
-
-	public XmlSObjectHandler(IMetadata metadata, IInputStreamRetriever retriever) throws ParserConfigurationException, SAXException {
-		this.retriever = retriever;
-		this.metadata = metadata;
+	public XmlSObjectHandler(IMetadata metadata, IInputStreamRetriever retriever) {
+		super(metadata, retriever);
 	}
 
-	public XmlSObjectHandler(IHandler handler) {
-		this.handler = handler;
-		this.metadata = handler.getMetadata();
-		this.retriever = handler.getRetriever();
+	public XmlSObjectHandler(AbstractHandler handler) {
+		super(handler);
 	}
 
 	@Override
-	public IMetadata getMetadata() {
-		return metadata;
-	}
-
-	@Override
-	public IInputStreamRetriever getRetriever() {
-		return retriever;
-	}
-
-	@Override
-	public void handle() throws Exception {
-		if (handler != null) {
-			handler.handle();
-		}
+	protected void executeHandlerAction() throws Exception {
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 		SAXParser parser = parserFactory.newSAXParser();
 
 		LayoutMetadata layoutMetadata = (LayoutMetadata) metadata;
-		for (String sObjectName : layoutMetadata.getProcessedObjects()) {
+		for (String sObjectName : layoutMetadata.getAvailableObjects()) {
 			SaxSObjectHandler handler = new SaxSObjectHandler(layoutMetadata, sObjectName);
 
 			String metadataFileName = sObjectName + Consts.METADATA_OBJECT_EXT;
@@ -87,7 +66,6 @@ public class XmlSObjectHandler implements IHandler {
 
 		private ArrayList<FieldItem> fieldItemList = null;
 		private FieldItem fieldItem = null;
-		private ArrayList<OptionItem> optionItems = null;
 		private OptionItem optionItem = null;
 		private String content = null;
 		private boolean ignoreTags = false;

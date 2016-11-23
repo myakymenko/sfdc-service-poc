@@ -58,7 +58,7 @@ public class Settings {
     public String get(String name) {
         String result = System.getenv(name);
         if (result == null) {
-            log.warn(String.format("The environment variable with the '%s' name isn't found! Please check whether it is defined in the Heroku.", name));
+            //log.warn(String.format("The environment variable with the '%s' name isn't found! Please check whether it is defined in the Heroku.", name));
         }
         return result == null ? settings.get(name) : result;
     }

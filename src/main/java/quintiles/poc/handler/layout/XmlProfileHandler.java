@@ -2,7 +2,6 @@ package quintiles.poc.handler.layout;
 
 import java.io.InputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -10,7 +9,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import quintiles.poc.api.IHandler;
 import quintiles.poc.api.IInputStreamRetriever;
 import quintiles.poc.api.IMetadata;
 import quintiles.poc.container.FieldItem;
@@ -18,51 +16,35 @@ import quintiles.poc.container.LayoutItem;
 import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.container.ProfileItem;
 import quintiles.poc.container.SObjectItem;
-import quintiles.poc.heroku.Consts;
+import quintiles.poc.handler.AbstractHandler;
+import quintiles.poc.util.Consts;
 
-public class XmlProfileHandler implements IHandler {
+public class XmlProfileHandler extends AbstractHandler {
 
-	private IInputStreamRetriever retriever;
-	private IHandler handler;
-	private IMetadata metadata;
-
-	public XmlProfileHandler(IMetadata metadata, IInputStreamRetriever retriever) throws ParserConfigurationException, SAXException {
-		this.retriever = retriever;
-		this.metadata = metadata;
+	public XmlProfileHandler(IMetadata metadata, IInputStreamRetriever retriever) {
+		super(metadata, retriever);
 	}
 
-	public XmlProfileHandler(IHandler handler) {
-		this.handler = handler;
-		this.metadata = handler.getMetadata();
-		this.retriever = handler.getRetriever();
+	public XmlProfileHandler(AbstractHandler handler) {
+		super(handler);
 	}
 
 	@Override
-	public IMetadata getMetadata() {
-		return metadata;
-	}
-
-	@Override
-	public IInputStreamRetriever getRetriever() {
-		return retriever;
-	}
-
-	@Override
-	public void handle() throws Exception {
-		if (handler != null) {
-			handler.handle();
-		}
+	protected void executeHandlerAction() throws Exception {
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 		SAXParser parser = parserFactory.newSAXParser();
 
 		LayoutMetadata layoutMetadata = (LayoutMetadata) metadata;
-		SaxProfileHandler handler = new SaxProfileHandler(layoutMetadata);
-
-		String metadataFileName = layoutMetadata.getProfileName() + Consts.METADATA_PROFILE_EXT;
-
-		retriever.setSourceItem(metadataFileName);
-		InputStream foundSObject = retriever.getInputStream();
-		parser.parse(foundSObject, handler);
+		
+		for (String processedProfile : layoutMetadata.getAvailableProfiles()) {
+			SaxProfileHandler handler = new SaxProfileHandler(layoutMetadata, processedProfile);
+			
+			String metadataFileName = processedProfile + Consts.METADATA_PROFILE_EXT;
+			
+			retriever.setSourceItem(metadataFileName);
+			InputStream foundSObject = retriever.getInputStream();
+			parser.parse(foundSObject, handler);
+		}
 	}
 
 	private class SaxProfileHandler extends DefaultHandler {
@@ -83,17 +65,15 @@ public class XmlProfileHandler implements IHandler {
 		private LayoutItem layoutItem = null;
 		private String content = null;
 		private String sObject = null;
-		private String rtName = null;
 		private String foundLayoutName = null;
 		private String foundRtName = null;
 		private boolean visible = true;
 		private boolean readOnly = true;
 
-		public SaxProfileHandler(LayoutMetadata layoutMetadata) {
+		public SaxProfileHandler(LayoutMetadata layoutMetadata, String profileName) {
 			this.layoutMetadata = layoutMetadata;
-			this.rtName = layoutMetadata.getRecordType();
-			this.profile = new ProfileItem(layoutMetadata.getProfileName());
-			layoutMetadata.setProfile(profile);
+			this.profile = new ProfileItem(profileName);
+			layoutMetadata.setProfile1(profile);
 		}
 
 		@Override
@@ -166,9 +146,7 @@ public class XmlProfileHandler implements IHandler {
 					layoutItem.setType(sObject);
 					layoutItem.setSubtype(foundRtName);
 
-					if ((rtName != null && rtName.equals(foundRtName)) || (rtName == null)) {
-						profile.setLayout(layoutItem);
-					}
+					profile.setLayout(layoutItem);
 				}
 				break;
 			}

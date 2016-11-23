@@ -3,12 +3,19 @@ package quintiles.poc.container;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import com.google.gson.annotations.Expose;
+
 public class LayoutItem {
 	
-	private transient String name;
+	private String name;
+	@Expose()
 	private String type;
+	@Expose()
 	private String subtype;
+	@Expose()
 	private String recordTypeId;
+	private String profileName;
+	@Expose()
 	private ArrayList<SectionItem> sections = new ArrayList<>();
 
 	public LayoutItem() {
@@ -79,6 +86,14 @@ public class LayoutItem {
 
 	public boolean containsSection(SectionItem sectionItem) {
 		return this.sections.contains(sectionItem);
+	}
+	
+	public String getProfileName() {
+		return profileName;
+	}
+
+	public void setProfileName(String profileName) {
+		this.profileName = profileName;
 	}
 
 	@Override

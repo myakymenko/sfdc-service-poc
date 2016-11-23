@@ -1,0 +1,1 @@
+web: java -Xmx512m -jar target\dependency\jetty-runner-9.0.6.v20130930.jar --port 5000 target/*.war

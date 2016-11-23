@@ -3,17 +3,27 @@ package quintiles.poc.container;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import com.google.gson.annotations.Expose;
+
 public class FieldItem {
 
-	private transient String section;
-	private transient String objectName;
+	private String section;
+	private String objectName;
+	@Expose()
 	private String name;
+	@Expose()
 	private String label;
-	private boolean required = false;
-	private boolean readonly = false;
-	private transient boolean visible = true;
-	private String relatedObject;
+	@Expose()
 	private String type;
+	@Expose()
+	private boolean required = false;
+	@Expose()
+	private boolean readonly = false;
+
+	private boolean visible = true;
+	@Expose()
+	private String relatedObject;
+	@Expose()
 	private ArrayList<OptionItem> options = null;
 
 	public FieldItem() {
@@ -109,7 +119,7 @@ public class FieldItem {
 	public void setType(String type) {
 		this.type = type;
 	}
-
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

@@ -2,7 +2,6 @@ package quintiles.poc.handler.layout;
 
 import java.io.InputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -10,56 +9,35 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import quintiles.poc.api.IHandler;
 import quintiles.poc.api.IInputStreamRetriever;
 import quintiles.poc.api.IMetadata;
 import quintiles.poc.container.FieldItem;
 import quintiles.poc.container.LayoutItem;
 import quintiles.poc.container.LayoutMetadata;
 import quintiles.poc.container.SectionItem;
-import quintiles.poc.heroku.Consts;
+import quintiles.poc.handler.AbstractHandler;
+import quintiles.poc.util.Consts;
 
-public class XmlLayoutHandler implements IHandler {
+public class XmlLayoutHandler extends AbstractHandler {
 
-	private IInputStreamRetriever retriever;
-	private IHandler handler;
-	private IMetadata metadata;
-
-	public XmlLayoutHandler(IMetadata metadata, IInputStreamRetriever retriever) throws ParserConfigurationException, SAXException {
-		this.retriever = retriever;
-		this.metadata = metadata;
+	public XmlLayoutHandler(IMetadata metadata, IInputStreamRetriever retriever) {
+		super(metadata, retriever);
 	}
 
-	public XmlLayoutHandler(IHandler handler) {
-		this.handler = handler;
-		this.metadata = handler.getMetadata();
-		this.retriever = handler.getRetriever();
+	public XmlLayoutHandler(AbstractHandler handler) {
+		super(handler);
 	}
 
 	@Override
-	public IMetadata getMetadata() {
-		return metadata;
-	}
-
-	@Override
-	public IInputStreamRetriever getRetriever() {
-		return retriever;
-	}
-
-	@Override
-	public void handle() throws Exception {
-		if (handler != null) {
-			handler.handle();
-		}
+	protected void executeHandlerAction() throws Exception {
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 		SAXParser parser = parserFactory.newSAXParser();
 
 		LayoutMetadata layoutMetadata = (LayoutMetadata) metadata;
-		for (LayoutItem layoutItem : layoutMetadata.getProfile().getLayouts()) {
-			String layoutName = layoutItem.getName();
+		for (String layoutName : layoutMetadata.getAvailableLayouts()) {
 			SaxLayoutHandler handler = new SaxLayoutHandler(layoutMetadata, layoutName);
 
-			String metadataFileName = layoutItem.getName() + Consts.METADATA_LAYOUT_EXT;
+			String metadataFileName = layoutName + Consts.METADATA_LAYOUT_EXT;
 
 			retriever.setSourceItem(metadataFileName);
 			InputStream foundSObject = retriever.getInputStream();

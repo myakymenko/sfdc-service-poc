@@ -7,58 +7,57 @@ import quintiles.poc.api.IMetadata;
 
 public class LayoutMetadata implements IMetadata {
 
-	private String profileName = null;
-	private String recordType = null;
-	private ArrayList<String> processedObjects = new ArrayList<>();
-	private ProfileItem profile = null;
+	private ArrayList<String> availableObjects = new ArrayList<>();
+	private ArrayList<String> availableLayouts = new ArrayList<>();
+	private ArrayList<String> availableProfiles = new ArrayList<>();
 	private ArrayList<SObjectItem> sObjects = new ArrayList<>();
+	private ArrayList<ProfileItem> profiles = new ArrayList<>();
 	private ArrayList<LayoutItem> layouts = new ArrayList<>();
 	private ArrayList<LayoutItem> processedLayouts = new ArrayList<>();
 
 	public LayoutMetadata() {
 	}
-
-	public LayoutMetadata(String profileName, String sObjectName, String recordType) {
-		this.profileName = profileName;
-		this.recordType = recordType;
-		this.processedObjects.add(sObjectName);
+	
+	public LayoutMetadata(String[] profileNames, String[] processedObjects, String[] processedLayouts) {
+		this.availableProfiles = new ArrayList<>(Arrays.asList(profileNames));
+		this.availableObjects = new ArrayList<>(Arrays.asList(processedObjects));
+		this.availableLayouts = new ArrayList<>(Arrays.asList(processedLayouts));
 	}
 
-	public LayoutMetadata(String profileName, String[] processedObjects) {
-		this.profileName = profileName;
-		this.processedObjects = new ArrayList<>(Arrays.asList(processedObjects));
+	public ArrayList<String> getAvailableObjects() {
+		return availableObjects;
 	}
 
-	public String getProfileName() {
-		return profileName;
+	public void setAvailableObjects(ArrayList<String> availableObjects) {
+		this.availableObjects = availableObjects;
 	}
 
-	public void setProfileName(String profileName) {
-		this.profileName = profileName;
+	public ArrayList<String> getAvailableProfiles() {
+		return availableProfiles;
 	}
 
-	public String getRecordType() {
-		return recordType;
+	public void setAvailableProfiles(ArrayList<String> availableProfiles) {
+		this.availableProfiles = availableProfiles;
 	}
 
-	public void setRecordType(String recordType) {
-		this.recordType = recordType;
+	public ArrayList<String> getAvailableLayouts() {
+		return availableLayouts;
 	}
 
-	public ArrayList<String> getProcessedObjects() {
-		return processedObjects;
+	public void setAvailbleLayouts(ArrayList<String> availableLayouts) {
+		this.availableLayouts = availableLayouts;
 	}
 
-	public void setProcessedObjects(ArrayList<String> processedObjects) {
-		this.processedObjects = processedObjects;
+	public ArrayList<ProfileItem> getProfiles() {
+		return profiles;
 	}
 
-	public ProfileItem getProfile() {
-		return profile;
+	public void setProfiles(ArrayList<ProfileItem> profiles) {
+		this.profiles = profiles;
 	}
-
-	public void setProfile(ProfileItem profile) {
-		this.profile = profile;
+	
+	public void setProfile1(ProfileItem profile) {
+		this.profiles.add(profile);
 	}
 
 	public ArrayList<SObjectItem> getSObjects() {
@@ -136,7 +135,6 @@ public class LayoutMetadata implements IMetadata {
 	}
 
 	public boolean hasProcessedObject(String sObjectName) {
-		return processedObjects.contains(sObjectName);
+		return availableObjects.contains(sObjectName);
 	}
-
 }

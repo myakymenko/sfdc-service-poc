@@ -1,8 +1,12 @@
 package quintiles.poc.container;
 
+import com.google.gson.annotations.Expose;
+
 public class OptionItem {
 
+	@Expose()
 	private String code;
+	@Expose()
 	private String label;
 
 	public String getCode() {

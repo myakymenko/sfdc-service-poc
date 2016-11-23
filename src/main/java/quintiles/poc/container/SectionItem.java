@@ -3,9 +3,13 @@ package quintiles.poc.container;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class SectionItem {
+import com.google.gson.annotations.Expose;
 
+public class SectionItem {
+	
+	@Expose()
 	private String name;
+	@Expose()
 	private ArrayList<FieldItem> fields = new ArrayList<>();
 
 	public SectionItem() {
