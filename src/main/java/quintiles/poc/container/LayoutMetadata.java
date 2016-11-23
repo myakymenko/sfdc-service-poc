@@ -56,7 +56,7 @@ public class LayoutMetadata implements IMetadata {
 		this.profiles = profiles;
 	}
 	
-	public void setProfile1(ProfileItem profile) {
+	public void setProfile(ProfileItem profile) {
 		this.profiles.add(profile);
 	}
 
@@ -134,7 +134,7 @@ public class LayoutMetadata implements IMetadata {
 		this.processedLayouts.add(processedLayout);
 	}
 
-	public boolean hasProcessedObject(String sObjectName) {
+	public boolean hasAvailableSObject(String sObjectName) {
 		return availableObjects.contains(sObjectName);
 	}
 }

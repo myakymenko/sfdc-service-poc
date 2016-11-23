@@ -73,7 +73,7 @@ public class XmlProfileHandler extends AbstractHandler {
 		public SaxProfileHandler(LayoutMetadata layoutMetadata, String profileName) {
 			this.layoutMetadata = layoutMetadata;
 			this.profile = new ProfileItem(profileName);
-			layoutMetadata.setProfile1(profile);
+			layoutMetadata.setProfile(profile);
 		}
 
 		@Override
@@ -107,7 +107,7 @@ public class XmlProfileHandler extends AbstractHandler {
 			case PROF_TAG_FIELD_NAME:
 				sObject = content.substring(0, content.indexOf(PROF_DOT_SEPARATOR));
 
-				if (layoutMetadata.hasProcessedObject(sObject)/* && visible */) {
+				if (layoutMetadata.hasAvailableSObject(sObject)) {
 					SObjectItem sObjectItem = profile.getSObjectByName(sObject);
 
 					if (sObjectItem == null) {
@@ -141,7 +141,7 @@ public class XmlProfileHandler extends AbstractHandler {
 
 				foundRtName = foundRtName != null ? foundRtName.substring(foundRtName.indexOf(PROF_DOT_SEPARATOR) + 1) : foundRtName;
 
-				if (layoutMetadata.hasProcessedObject(sObject)) {
+				if (layoutMetadata.hasAvailableSObject(sObject)) {
 					layoutItem.setName(foundLayoutName);
 					layoutItem.setType(sObject);
 					layoutItem.setSubtype(foundRtName);

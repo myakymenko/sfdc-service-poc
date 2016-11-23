@@ -66,7 +66,7 @@ public class XmlLayoutHandler extends AbstractHandler {
 		public SaxLayoutHandler(LayoutMetadata layoutMetadata, String processedLayoutName) {
 			String sObject = processedLayoutName.substring(0, processedLayoutName.indexOf(PROF_MINUS_SEPARATOR));
 
-			if (layoutMetadata.hasProcessedObject(sObject)) {
+			if (layoutMetadata.hasAvailableSObject(sObject)) {
 				layoutItem = new LayoutItem(processedLayoutName);
 				layoutItem.setType(sObject);
 			}

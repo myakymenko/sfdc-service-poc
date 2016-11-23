@@ -89,11 +89,11 @@ public class MetadataRetrieveService {
 		AsyncResult asyncResult = metadataConnection.retrieve(retrieveRequest);
 
 		int poll = 0;
-		long waitTimeMilliSecs = Consts.ONE_SECOND_MS;
+		
 		String asyncResultId = asyncResult.getId();
 		RetrieveResult result = null;
 		do {
-			Thread.sleep(waitTimeMilliSecs);
+			Thread.sleep(Consts.ONE_SECOND_MS);
 
 			if (poll++ > Consts.MAX_NUM_POLL_REQUESTS) {
 				throw new Exception("Request timed out.  If this is a large set " + "of metadata components, check that the time allowed " + "by MAX_NUM_POLL_REQUESTS is sufficient.");
