@@ -30,8 +30,7 @@ public class Consts {
     // maximum number of attempts to deploy the zip file
 	public static final int MAX_NUM_POLL_REQUESTS = 50;
 	
-	//public static final String WORKING_DIR = "/tmp/";
-	public static final String WORKING_DIR = "D:\\work\\MYenv\\workingDir\\";
+	public static final String WORKING_DIR = "/tmp/";
 	
 	public static final String ZIP_FILE = "metadata.zip";
 	public static final String LAYUOTS_SUB_DIR = WORKING_DIR + "layoutsMetadata" + File.separator;
